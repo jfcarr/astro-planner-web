@@ -22,7 +22,7 @@ After the project loads in your default browser, select the "Observing Plan" pag
 
 ## Publish
 
-If you want to generate a standalone web project suitable for deployment:
+If you want to generate a standalone web project suitable for uploading to a web host:
 
 1. Open a command prompt in the src/AstroPlanner directory.
 
@@ -38,7 +38,7 @@ or
 dotnet publish -c Release
 ```
 
-A website with all of the required WebAssembly binaries will be generated in `src/AstroPlanner/bin/Release/publish/wwwroot`.  You can open the index.html file in your browser or, if you want to host the project, upload all of the contents of the wwwroot directory, including all subdirectories.
+A website with all of the required WebAssembly binaries will be generated in `src/AstroPlanner/bin/Release/publish/wwwroot`.  Upload all of the contents of the wwwroot directory to your web host, including all subdirectories.  You can also run locally with a development server, e.g., `php -S localhost:8088`.
 
 ## Some Technical Details
 
