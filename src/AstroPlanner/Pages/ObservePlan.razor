@@ -1,0 +1,129 @@
+@page "/observeplan"
+@using AstroPlanner.Models
+@using Microsoft.FluentUI.AspNetCore.Components.Extensions
+@inject HttpClient Http
+@inject AstroPlanner.Services.LocalStorage LocalStorage
+
+<PageTitle>Observing Plan</PageTitle>
+
+<FluentHeader>Observing Plan</FluentHeader>
+
+<div style="padding:10px;min-width:800px">
+    <FluentToolbar id="toolbar-fluent-components-two">
+        <FluentSwitch @bind-Value=showObserverOptions Label=" Observer Options" />
+        <FluentSwitch @bind-Value=showSections Label=" Sections" />
+    </FluentToolbar>
+</div>
+
+<div class="@(showObserverOptions ? "block-visible" : "block-hidden")">
+    <FluentCard Id="observerOptions" AreaRestricted="false">
+        <p>
+            <FluentTextField @bind-Value=zipCode @bind-Value:after="UpdateState" Label="Zip Code"></FluentTextField>
+        </p>
+
+        <p>
+            <FluentButton Appearance="Appearance.Accent" @onclick="GetCoordinates">Lookup</FluentButton>
+        </p>
+
+        <FluentDatePicker Label="Observation Date" @bind-Value=observationDate @bind-Value:after="UpdateState"
+            AriaLabel="To" DoubleClickToDate="@DateTime.Today" />
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>Place:</td>
+                    <td>@PlanOptionsState.PlaceName</td>
+                </tr>
+                <tr>
+                    <td>Latitude / Longitude:</td>
+                    <td>@PlanOptionsState.Latitude / @PlanOptionsState.Longitude</td>
+                </tr>
+                <tr>
+                    <td>Time Zone / UTC offset:</td>
+                    <td>@PlanOptionsState.TimeZone / @PlanOptionsState.TimeZoneOffset</td>
+                </tr>
+                <tr>
+                    <td>Daylight Saving:</td>
+                    <td>@PlanOptionsState.IsDaylightSaving</td>
+                </tr>
+            </tbody>
+        </table>
+    </FluentCard>
+</div>
+
+<div class="@(showSections ? "block-visible" : "block-hidden")">
+    <FluentCard AreaRestricted="false">
+        <FluentSwitch @bind-Value=showSunInfo Label=" The Sun" />
+        <FluentSwitch @bind-Value=showMoonInfo Label=" The Moon" />
+        <FluentSwitch @bind-Value=showEclipseInfo Label=" Eclipses" />
+    </FluentCard>
+</div>
+
+@if (!String.IsNullOrEmpty(PlanOptionsState.ZipCode) && PlanOptionsState.ObservationDate != null)
+{
+    <br />
+    <FluentCard id="observationPlan">
+        <h2>@PlanOptionsState.PlaceName - @PlanOptionsState.ObservationDate.ToDateOnly().ToLongDateString()</h2>
+
+        <div class="@(showSunInfo ? "block-visible" : "block-hidden")">
+            <FluentCard>
+                <FluentLabel Typo="Typography.H4">The Sun</FluentLabel>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Twilight (Astronomical / Nautical / Civil) begins:</td>
+                            <td>@SunInfo.AstronomicalTwilightBegins / @SunInfo.NauticalTwilightBegins /
+                                @SunInfo.CivilTwilightBegins</td>
+                        </tr>
+                        <tr>
+                            <td>Sunrise:</td>
+                            <td>@SunInfo.SunRise</td>
+                        </tr>
+                        <tr>
+                            <td>Sunset:</td>
+                            <td>@SunInfo.SunSet</td>
+                        </tr>
+                        <tr>
+                            <td>Twilight (Civil / Nautical / Astronomical) ends:</td>
+                            <td>@SunInfo.CivilTwilightEnds / @SunInfo.NauticalTwilightEnds /
+                                @SunInfo.AstronomicalTwilightEnds</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </FluentCard>
+        </div>
+
+        <div class="@(showMoonInfo ? "block-visible" : "block-hidden")">
+            <FluentCard>
+                <FluentLabel Typo="Typography.H4">The Moon</FluentLabel>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Rise:</td>
+                            <td>@MoonInfo.RiseTime</td>
+                        </tr>
+                        <tr>
+                            <td>Set:</td>
+                            <td>@MoonInfo.SetTime</td>
+                        </tr>
+                        <tr>
+                            <td>Phase:</td>
+                            <td>@MoonInfo.PhaseDescription</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </FluentCard>
+        </div>
+
+        <div class="@(showEclipseInfo ? "block-visible" : "block-hidden")">
+            <FluentCard>
+                <FluentLabel Typo="Typography.H4">Eclipses</FluentLabel>
+                @EclipseInfo.LunarEclipseStatus (@EclipseInfo.LunarEclipseDate => @EclipseInfo.LunarEclipseWhen)
+            </FluentCard>
+        </div>
+    </FluentCard>
+}
+else
+{
+    <p><i>Missing observer options</i></p>
+}

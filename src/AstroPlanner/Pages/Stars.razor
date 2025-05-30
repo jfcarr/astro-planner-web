@@ -1,0 +1,38 @@
+@page "/stars"
+@using AstroPlanner.Services
+@inject HttpClient Http
+
+<PageTitle>Bright Stars</PageTitle>
+
+<FluentHeader>Bright Stars</FluentHeader>
+
+<br />
+
+<FluentCard>
+    @if (DataProvider.stars == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Right Ascension</th>
+                    <th>Declination</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var star in DataProvider.stars)
+                {
+                    <tr>
+                        <td>@star.Name</td>
+                        <td>@star.RightAscension</td>
+                        <td>@star.Declination</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</FluentCard>
