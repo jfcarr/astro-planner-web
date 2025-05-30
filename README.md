@@ -1,5 +1,7 @@
 # astro-planner-web
 
+A simple web-based astronomical observation plan generator.
+
 ## Local Setup
 
 1. Clone the repo.
