@@ -16,4 +16,5 @@ public static class PlanOptionsState
     public static TimeSpan? TimeZoneOffset { get; set; }
     public static bool? IsDaylightSaving { get; set; }
     public static DateTime? ObservationDate { get; set; }
+    public static DateTime? ObservationTime { get; set; }
 }
