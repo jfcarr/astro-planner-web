@@ -17,12 +17,16 @@ public partial class ObservePlan
 
     private string? zipCode;
     private DateTime? observationDate;
+    private DateTime? observationTime = null;
 
     protected override async Task OnInitializedAsync()
     {
         zipCode = await LocalStorage.GetItemAsync("ZipCode");
         if (DateTime.TryParse(await LocalStorage.GetItemAsync("ObservationDate"), out DateTime dateValue))
             observationDate = dateValue;
+        if (DateTime.TryParse(await LocalStorage.GetItemAsync("ObservationTime"), out DateTime timeValue))
+            observationTime = timeValue;
+
 
         if (!String.IsNullOrEmpty(zipCode) && String.IsNullOrEmpty(PlanOptionsState.PlaceName))
             await GetCoordinates();
@@ -60,6 +64,7 @@ public partial class ObservePlan
     {
         PlanOptionsState.ZipCode = zipCode;
         PlanOptionsState.ObservationDate = observationDate;
+        PlanOptionsState.ObservationTime = observationTime;
 
         if (!string.IsNullOrEmpty(PlanOptionsState.TimeZone) && PlanOptionsState.ObservationDate is not null)
         {
@@ -70,6 +75,7 @@ public partial class ObservePlan
 
         await LocalStorage.SetItemAsync("ZipCode", zipCode ?? "");
         await LocalStorage.SetItemAsync("ObservationDate", observationDate.ToString() ?? "");
+        await LocalStorage.SetItemAsync("ObservationTime", observationTime.ToString() ?? "");
 
         if (!String.IsNullOrEmpty(PlanOptionsState.PlaceName) && PlanOptionsState.ObservationDate is not null)
         {

@@ -18,15 +18,20 @@
 <div class="@(showObserverOptions ? "block-visible" : "block-hidden")">
     <FluentCard Id="observerOptions" AreaRestricted="false">
         <p>
-            <FluentTextField @bind-Value=zipCode @bind-Value:after="UpdateState" Label="Zip Code"></FluentTextField>
+            <FluentTextField @bind-Value=zipCode @bind-Value:after="UpdateState" Label="Zip Code:"></FluentTextField>
         </p>
 
         <p>
             <FluentButton Appearance="Appearance.Accent" @onclick="GetCoordinates">Lookup</FluentButton>
         </p>
 
-        <FluentDatePicker Label="Observation Date" @bind-Value=observationDate @bind-Value:after="UpdateState"
+        <FluentDatePicker Label="Observation Date:" @bind-Value=observationDate @bind-Value:after="UpdateState"
             AriaLabel="To" DoubleClickToDate="@DateTime.Today" />
+
+        <FluentTimePicker @bind-Value="@observationTime" @bind-Value:after="UpdateState"
+            Label="Observation Time (optional):" />
+
+        <hr>
 
         <table class="table">
             <tbody>
