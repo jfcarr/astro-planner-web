@@ -151,22 +151,16 @@ public partial class ObservePlan
 
             riseDate = DateOnly.FromDateTime(new DateTime(riseSet.mrLocalDateYear, riseSet.mrLocalDateMonth, (int)riseSet.mrLocalDateDay));
             riseTime = new DateTime(1, 1, 1, (int)riseSet.mrLTHour, (int)riseSet.mrLTMin, 0);
-        }
-
-        if (setDate < checkDate || new DateTime(setDate.Year, setDate.Month, setDate.Day, setTime.Hour, setTime.Minute, setTime.Second) < new DateTime(riseDate.Year, riseDate.Month, riseDate.Day, riseTime.Hour, riseTime.Minute, riseTime.Second))
-        {
-            checkDate = PlanOptionsState.ObservationDate.ToDateOnly().AddDays(1);
-
-            riseSet = pAMoon.MoonriseAndMoonset(
-                checkDate.Day, checkDate.Month, checkDate.Year,
-                false,
-                (PlanOptionsState.TimeZoneOffset is not null) ? PlanOptionsState.TimeZoneOffset.Value.Hours : 0,
-                Convert.ToDouble(PlanOptionsState.Longitude), Convert.ToDouble(PlanOptionsState.Latitude)
-            );
-
             setDate = DateOnly.FromDateTime(new DateTime(riseSet.msLocalDateYear, riseSet.msLocalDateMonth, (int)riseSet.msLocalDateDay));
             setTime = new DateTime(1, 1, 1, (int)riseSet.msLTHour, (int)riseSet.msLTMin, 0);
         }
+
+        if (
+            new DateTime(setDate.Year, setDate.Month, setDate.Day, setTime.Hour, setTime.Minute, setTime.Second)
+            <
+            new DateTime(riseDate.Year, riseDate.Month, riseDate.Day, riseTime.Hour, riseTime.Minute, riseTime.Second)
+        )
+            setDate = setDate.AddDays(1);
 
         MoonInfo.RiseTime = $"{riseDate.ToLongDateString()} at {riseTime.ToString("h:mm tt", CultureInfo.InvariantCulture)}";
         MoonInfo.SetTime = $"{setDate.ToLongDateString()} at {setTime.ToString("h:mm tt", CultureInfo.InvariantCulture)}";
@@ -179,11 +173,11 @@ public partial class ObservePlan
 
         MoonInfo.PhaseDescription = moonPhase.moonPhase switch
         {
-            >= .99 => $"Full ({moonPhase.moonPhase * 100}%)",
-            < .01 => $"New ({moonPhase.moonPhase * 100}%)",
-            >= .48 and <= .52 => $"Half-Full ({moonPhase.moonPhase * 100}%)",
-            < .48 => $"Crescent ({moonPhase.moonPhase * 100}%)",
-            > .52 => $"Gibbous ({moonPhase.moonPhase * 100}%)",
+            >= .99 => $"Full ({Math.Floor(moonPhase.moonPhase * 100)}%)",
+            <= .01 => $"New ({Math.Floor(moonPhase.moonPhase * 100)}%)",
+            >= .48 and <= .52 => $"Half-Full ({Math.Floor(moonPhase.moonPhase * 100)}%)",
+            < .48 => $"Crescent ({Math.Floor(moonPhase.moonPhase * 100)}%)",
+            > .52 => $"Gibbous ({Math.Floor(moonPhase.moonPhase * 100)}%)",
             _ => "Unknown",
         };
     }
