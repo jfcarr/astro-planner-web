@@ -1,5 +1,5 @@
 using System.Net.Http.Json;
-using AstroPlanner.Models;
+using AstroPlanner.Util.Models;
 
 namespace AstroPlanner.Pages;
 

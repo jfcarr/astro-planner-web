@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Components;
-
-namespace AstroPlanner.Models;
+namespace AstroPlanner.Util.Models;
 
 public static class PlanOptionsState
 {

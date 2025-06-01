@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace AstroPlanner.Models;
+namespace AstroPlanner.Util.Models;
 
 public class LocationInfo
 {
