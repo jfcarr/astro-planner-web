@@ -10,6 +10,7 @@ public partial class ObservePlan
     private bool showSections = false;
     private bool showSunInfo = true;
     private bool showMoonInfo = true;
+    private bool showPlanetInfo = true;
     private bool showEclipseInfo = true;
 
     private string? zipCode;
@@ -36,6 +37,7 @@ public partial class ObservePlan
             AstroData.UpdateEclipseInfo();
             AstroData.UpdateMoonInfo();
             AstroData.UpdateSunInfo();
+            AstroData.UpdatePlanetInfo();
         }
     }
 
@@ -61,6 +63,7 @@ public partial class ObservePlan
             AstroData.UpdateEclipseInfo();
             AstroData.UpdateMoonInfo();
             AstroData.UpdateSunInfo();
+            AstroData.UpdatePlanetInfo();
         }
     }
 }

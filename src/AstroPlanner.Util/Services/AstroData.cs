@@ -132,4 +132,50 @@ public static class AstroData
         SunInfo.SunRise = (riseSet.status == "OK") ? new DateTime(checkDate.Year, checkDate.Month, checkDate.Day, (int)riseSet.localSunriseHour, (int)riseSet.localSunriseMinute, 0).ToString("h:mm tt", CultureInfo.InvariantCulture) : "";
         SunInfo.SunSet = (riseSet.status == "OK") ? new DateTime(checkDate.Year, checkDate.Month, checkDate.Day, (int)riseSet.localSunsetHour, (int)riseSet.localSunsetMinute, 0).ToString("h:mm tt", CultureInfo.InvariantCulture) : "";
     }
+
+    public static void UpdatePlanetInfo()
+    {
+        PAPlanet pAPlanet = new();
+        PACoordinates pACoordinates = new();
+
+        DateTime checkDate = (PlanOptionsState.ObservationDate is not null) ? (DateTime)PlanOptionsState.ObservationDate : new DateTime();
+        DateTime? checkTime = PlanOptionsState.ObservationTime;
+
+        PlanetInfo.PlanetDetails = [];
+
+        if (checkTime is not null)
+        {
+            string[] planetNames = ["Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
+
+            foreach (var planetName in planetNames)
+            {
+                (double planetRAHour, double planetRAMin, double planetRASec, double planetDecDeg, double planetDecMin, double planetDecSec) planetPosition = pAPlanet.ApproximatePositionOfPlanet(checkTime.Value.Hour, checkTime.Value.Minute, checkTime.Value.Second, false, (PlanOptionsState.TimeZoneOffset is not null) ? PlanOptionsState.TimeZoneOffset.Value.Hours : 0, checkDate.Day, checkDate.Month, checkDate.Year, planetName);
+
+                (double hourAngleHours, double hourAngleMinutes, double hourAngleSeconds) planetHourAngle = pACoordinates.RightAscensionToHourAngle(planetPosition.planetRAHour, planetPosition.planetRAMin, planetPosition.planetRASec, checkTime.Value.Hour, checkTime.Value.Minute, checkTime.Value.Second, false, (PlanOptionsState.TimeZoneOffset is not null) ? PlanOptionsState.TimeZoneOffset.Value.Hours : 0, checkDate.Day, checkDate.Month, checkDate.Year, Convert.ToDouble(PlanOptionsState.Longitude));
+
+                (double azimuthDegrees, double azimuthMinutes, double azimuthSeconds, double altitudeDegrees, double altitudeMinutes, double altitudeSeconds) planetLocalPosition = pACoordinates.EquatorialCoordinatesToHorizonCoordinates(planetHourAngle.hourAngleHours, planetHourAngle.hourAngleMinutes, planetHourAngle.hourAngleSeconds, planetPosition.planetDecDeg, planetPosition.planetDecMin, planetPosition.planetDecSec, Convert.ToDouble(PlanOptionsState.Latitude));
+
+                (double distanceAU, double angDiaArcsec, double phase, double lightTimeHour, double lightTimeMinutes, double lightTimeSeconds, double posAngleBrightLimbDeg, double approximateMagnitude) planetAspects = pAPlanet.VisualAspectsOfAPlanet(checkTime.Value.Hour, checkTime.Value.Minute, checkTime.Value.Second, false, (PlanOptionsState.TimeZoneOffset is not null) ? PlanOptionsState.TimeZoneOffset.Value.Hours : 0, checkDate.Day, checkDate.Month, checkDate.Year, planetName);
+
+                PlanetInfo.PlanetDetails.Add(new PlanetDetail()
+                {
+                    Name = planetName,
+                    RightAscensionHour = planetPosition.planetRAHour,
+                    RightAscensionMinute = planetPosition.planetRAMin,
+                    RightAscensionSecond = planetPosition.planetRASec,
+                    DeclinationDegrees = planetPosition.planetDecDeg,
+                    DeclinationMinute = planetPosition.planetDecMin,
+                    DeclinationSecond = planetPosition.planetDecSec,
+                    AltitudeDegree = planetLocalPosition.altitudeDegrees,
+                    AltitudeMinute = planetLocalPosition.altitudeMinutes,
+                    AltitudeSecond = planetLocalPosition.altitudeSeconds,
+                    AzimuthDegrees = planetLocalPosition.azimuthDegrees,
+                    AzimuthMinute = planetLocalPosition.azimuthMinutes,
+                    AzimuthSecond = planetLocalPosition.azimuthSeconds,
+                    Magnitude = planetAspects.approximateMagnitude
+                });
+
+            }
+        }
+    }
 }
