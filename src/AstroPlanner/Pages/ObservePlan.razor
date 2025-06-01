@@ -1,4 +1,5 @@
 @page "/observeplan"
+@using AstroPlanner.Util.Helpers
 @using AstroPlanner.Util.Models
 @using AstroPlanner.Util.Services
 @using Microsoft.FluentUI.AspNetCore.Components.Extensions
@@ -147,7 +148,8 @@
                                     <td>@planetDetail.Name</td>
                                     <td>@planetDetail.AltitudeDegree degree(s)</td>
                                     <td>@(planetDetail.AltitudeDegree > 0 ? "Yes" : "No")</td>
-                                    <td>@planetDetail.AzimuthDegrees degree(s)</td>
+                                    <td>@planetDetail.AzimuthDegrees degree@(planetDetail.AzimuthDegrees > 1 ? "s" : "")
+                                        (@Direction.AzimuthToCardinalDirection(planetDetail.AzimuthDegrees))</td>
                                     <td>@planetDetail.Magnitude</td>
                                 </tr>
                             }
