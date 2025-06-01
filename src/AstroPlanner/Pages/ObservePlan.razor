@@ -71,108 +71,98 @@
 @if (!String.IsNullOrEmpty(PlanOptionsState.ZipCode) && PlanOptionsState.ObservationDate != null)
 {
     <br />
-    <FluentCard id="observationPlan">
-        <h2>@PlanOptionsState.PlaceName - @PlanOptionsState.ObservationDate.ToDateOnly().ToLongDateString()
-            @(PlanOptionsState.ObservationTime is not null ?
-                    $"at {PlanOptionsState.ObservationTime.ToTimeOnly().ToShortTimeString()}" : "")</h2>
+    <h2>@PlanOptionsState.PlaceName - @PlanOptionsState.ObservationDate.ToDateOnly().ToLongDateString()
+        @(PlanOptionsState.ObservationTime is not null ?
+            $"at {PlanOptionsState.ObservationTime.ToTimeOnly().ToShortTimeString()}" : "")</h2>
 
-    <div class="@(showSunInfo ? "block-visible" : "block-hidden")">
-        <FluentCard>
-            <FluentLabel Typo="Typography.H4">The Sun</FluentLabel>
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <td>Twilight (Astronomical / Nautical / Civil) begins:</td>
-                        <td>@SunInfo.AstronomicalTwilightBegins / @SunInfo.NauticalTwilightBegins /
-                            @SunInfo.CivilTwilightBegins</td>
-                    </tr>
-                    <tr>
-                        <td>Sunrise:</td>
-                        <td>@SunInfo.SunRise</td>
-                    </tr>
-                    <tr>
-                        <td>Sunset:</td>
-                        <td>@SunInfo.SunSet</td>
-                    </tr>
-                    <tr>
-                        <td>Twilight (Civil / Nautical / Astronomical) ends:</td>
-                        <td>@SunInfo.CivilTwilightEnds / @SunInfo.NauticalTwilightEnds /
-                            @SunInfo.AstronomicalTwilightEnds</td>
-                    </tr>
-                </tbody>
-            </table>
-        </FluentCard>
+<div class="@(showSunInfo ? "block-visible" : "block-hidden")">
+    <FluentLabel Typo="Typography.H4">The Sun</FluentLabel>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Twilight (Astronomical / Nautical / Civil) begins:</td>
+                <td>@SunInfo.AstronomicalTwilightBegins / @SunInfo.NauticalTwilightBegins /
+                    @SunInfo.CivilTwilightBegins</td>
+            </tr>
+            <tr>
+                <td>Sunrise:</td>
+                <td>@SunInfo.SunRise</td>
+            </tr>
+            <tr>
+                <td>Sunset:</td>
+                <td>@SunInfo.SunSet</td>
+            </tr>
+            <tr>
+                <td>Twilight (Civil / Nautical / Astronomical) ends:</td>
+                <td>@SunInfo.CivilTwilightEnds / @SunInfo.NauticalTwilightEnds /
+                    @SunInfo.AstronomicalTwilightEnds</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+    <div class="@(showMoonInfo ? "block-visible" : "block-hidden")">
+        <FluentLabel Typo="Typography.H4">The Moon</FluentLabel>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>Rise:</td>
+                    <td>@MoonInfo.RiseTime</td>
+                </tr>
+                <tr>
+                    <td>Set:</td>
+                    <td>@MoonInfo.SetTime</td>
+                </tr>
+                <tr>
+                    <td>Phase:</td>
+                    <td>@MoonInfo.PhaseDescription</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-        <div class="@(showMoonInfo ? "block-visible" : "block-hidden")">
-            <FluentCard>
-                <FluentLabel Typo="Typography.H4">The Moon</FluentLabel>
-                <table class="table">
-                    <tbody>
+    <div class="@(showPlanetInfo ? "block-visible" : "block-hidden")">
+        <FluentLabel Typo="Typography.H4">Planets</FluentLabel>
+    @if (PlanetInfo.PlanetDetails.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Altitude</th>
+                        <th>Azimuth</th>
+                        <th>Magnitude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var planetDetail in PlanetInfo.PlanetDetails)
+                    {
                         <tr>
-                            <td>Rise:</td>
-                            <td>@MoonInfo.RiseTime</td>
+                            <td>@planetDetail.Name</td>
+                            <td>@planetDetail.AltitudeDegree degree(s)
+                                @if (planetDetail.AltitudeDegree > 0)
+                                {
+                                    <FluentIcon Value="@(new Icons.Regular.Size24.Eye())" Title="Visible (above the horizon)" />
+                                }
+                            </td>
+                            <td>@planetDetail.AzimuthDegrees degree@(planetDetail.AzimuthDegrees > 1 ? "s" : "")
+                                (@Direction.AzimuthToCardinalDirection(planetDetail.AzimuthDegrees))</td>
+                            <td>@planetDetail.Magnitude</td>
                         </tr>
-                        <tr>
-                            <td>Set:</td>
-                            <td>@MoonInfo.SetTime</td>
-                        </tr>
-                        <tr>
-                            <td>Phase:</td>
-                            <td>@MoonInfo.PhaseDescription</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </FluentCard>
-        </div>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p><i>Planet info not available. Have you specified an observation time?</i></p>
+        }
+    </div>
 
-        <div class="@(showPlanetInfo ? "block-visible" : "block-hidden")">
-            <FluentCard>
-                <FluentLabel Typo="Typography.H4">Planets</FluentLabel>
-            @if (PlanetInfo.PlanetDetails.Count > 0)
-                {
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Altitude</th>
-                                <th>Azimuth</th>
-                                <th>Magnitude</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var planetDetail in PlanetInfo.PlanetDetails)
-                            {
-                                <tr>
-                                    <td>@planetDetail.Name</td>
-                                    <td>@planetDetail.AltitudeDegree degree(s)
-                                        @if (planetDetail.AltitudeDegree > 0)
-                                        {
-                                            <FluentIcon Value="@(new Icons.Regular.Size24.Eye())" Title="Visible (above the horizon)" />
-                                        }
-                                    </td>
-                                    <td>@planetDetail.AzimuthDegrees degree@(planetDetail.AzimuthDegrees > 1 ? "s" : "")
-                                        (@Direction.AzimuthToCardinalDirection(planetDetail.AzimuthDegrees))</td>
-                                    <td>@planetDetail.Magnitude</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-                else
-                {
-                    <p><i>Planet info not available. Have you specified an observation time?</i></p>
-                }
-            </FluentCard>
-        </div>
-
-        <div class="@(showEclipseInfo ? "block-visible" : "block-hidden")">
-            <FluentCard>
-                <FluentLabel Typo="Typography.H4">Eclipses</FluentLabel>
-                @EclipseInfo.LunarEclipseStatus (@EclipseInfo.LunarEclipseDate => @EclipseInfo.LunarEclipseWhen)
-            </FluentCard>
-        </div>
-    </FluentCard>
+    <div class="@(showEclipseInfo ? "block-visible" : "block-hidden")">
+        <FluentLabel Typo="Typography.H4">Eclipses</FluentLabel>
+        @EclipseInfo.LunarEclipseStatus (@EclipseInfo.LunarEclipseDate => @EclipseInfo.LunarEclipseWhen)
+    </div>
 }
 else
 {
