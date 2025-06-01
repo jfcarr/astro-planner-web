@@ -1,4 +1,4 @@
-namespace AstroPlanner.Models;
+namespace AstroPlanner.Util.Models;
 
 public struct EclipseInfo
 {

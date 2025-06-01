@@ -8,12 +8,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.16" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer"
-      Version="8.0.16" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.16" PrivateAssets="all" />
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.11.9" />
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.11.9" />
     <PackageReference Include="GeoTimeZone" Version="6.0.0" />
     <PackageReference Include="PracticalAstronomyDotNet" Version="1.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AstroPlanner.Util\AstroPlanner.Util.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 @page "/observeplan"
-@using AstroPlanner.Models
+@using AstroPlanner.Util.Models
+@using AstroPlanner.Util.Services
 @using Microsoft.FluentUI.AspNetCore.Components.Extensions
 @inject HttpClient Http
 @inject AstroPlanner.Services.LocalStorage LocalStorage
@@ -22,7 +23,8 @@
         </p>
 
         <p>
-            <FluentButton Appearance="Appearance.Accent" @onclick="GetCoordinates">Lookup</FluentButton>
+            <FluentButton Appearance="Appearance.Accent" @onclick="() => LocationProvider.GetCoordinates(zipCode)">
+                Lookup</FluentButton>
         </p>
 
         <FluentDatePicker Label="Observation Date:" @bind-Value=observationDate @bind-Value:after="UpdateState"
