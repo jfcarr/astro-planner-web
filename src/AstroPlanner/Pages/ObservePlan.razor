@@ -136,7 +136,6 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Altitude</th>
-                                <th>Visible?</th>
                                 <th>Azimuth</th>
                                 <th>Magnitude</th>
                             </tr>
@@ -146,8 +145,12 @@
                             {
                                 <tr>
                                     <td>@planetDetail.Name</td>
-                                    <td>@planetDetail.AltitudeDegree degree(s)</td>
-                                    <td>@(planetDetail.AltitudeDegree > 0 ? "Yes" : "No")</td>
+                                    <td>@planetDetail.AltitudeDegree degree(s)
+                                        @if (planetDetail.AltitudeDegree > 0)
+                                        {
+                                            <FluentIcon Value="@(new Icons.Regular.Size24.Eye())" Title="Visible (above the horizon)" />
+                                        }
+                                    </td>
                                     <td>@planetDetail.AzimuthDegrees degree@(planetDetail.AzimuthDegrees > 1 ? "s" : "")
                                         (@Direction.AzimuthToCardinalDirection(planetDetail.AzimuthDegrees))</td>
                                     <td>@planetDetail.Magnitude</td>
