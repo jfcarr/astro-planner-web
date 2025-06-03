@@ -1,5 +1,6 @@
 @page "/stars"
 @using AstroPlanner.Services
+@using AstroPlanner.Util.Models
 @using AstroPlanner.Util.Services
 @inject HttpClient Http
 
@@ -10,7 +11,7 @@
 <br />
 
 <FluentCard>
-    @if (DataProvider.stars == null)
+    @if (StarInfo.stars == null)
     {
         <p><em>Loading...</em></p>
     }
@@ -22,15 +23,19 @@
                     <th>Name</th>
                     <th>Right Ascension</th>
                     <th>Declination</th>
+                    <th>Constellation</th>
+                    <th>Magnitude</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var star in DataProvider.stars)
+                @foreach (var star in StarInfo.stars)
                 {
                     <tr>
                         <td>@star.Name</td>
-                        <td>@star.RightAscension</td>
-                        <td>@star.Declination</td>
+                        <td>@star.RightAscensionHours h @star.RightAscensionMinutes m @star.RightAscensionSeconds s</td>
+                        <td>@star.DeclinationDegrees d @star.DeclinationMinutes m @star.DeclinationSeconds s</td>
+                        <td>@star.Constellation</td>
+                        <td>@star.Magnitude</td>
                     </tr>
                 }
             </tbody>

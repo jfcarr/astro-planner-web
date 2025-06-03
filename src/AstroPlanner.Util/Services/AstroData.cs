@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Net.Http.Json;
 using AstroPlanner.Util.Models;
 using PALib;
 
@@ -175,6 +176,57 @@ public static class AstroData
                     Magnitude = planetAspects.approximateMagnitude
                 });
 
+            }
+        }
+    }
+
+    public static async Task LoadStarInfo(string baseAddress)
+    {
+        try
+        {
+            HttpClient http = new();
+
+            StarInfo.stars = await http.GetFromJsonAsync<Star[]>($"{baseAddress}astro-data/stars.json");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    public static void UpdateStarInfo(bool visibleOnly)
+    {
+        if (StarInfo.stars != null)
+        {
+            PACoordinates pACoordinates = new();
+
+            DateTime checkDate = (PlanOptionsState.ObservationDate is not null) ? (DateTime)PlanOptionsState.ObservationDate : new DateTime();
+            DateTime? checkTime = PlanOptionsState.ObservationTime;
+
+            if (checkTime is not null)
+            {
+                StarInfo.StarDetails = [];
+
+                foreach (Star star in StarInfo.stars)
+                {
+                    (double hourAngleHours, double hourAngleMinutes, double hourAngleSeconds) starHourAngle = pACoordinates.RightAscensionToHourAngle(star.RightAscensionHours, star.RightAscensionMinutes, star.RightAscensionSeconds, checkTime.Value.Hour, checkTime.Value.Minute, checkTime.Value.Second, false, (PlanOptionsState.TimeZoneOffset is not null) ? PlanOptionsState.TimeZoneOffset.Value.Hours : 0, checkDate.Day, checkDate.Month, checkDate.Year, Convert.ToDouble(PlanOptionsState.Longitude));
+
+                    (double azimuthDegrees, double azimuthMinutes, double azimuthSeconds, double altitudeDegrees, double altitudeMinutes, double altitudeSeconds) starLocalPosition = pACoordinates.EquatorialCoordinatesToHorizonCoordinates(starHourAngle.hourAngleHours, starHourAngle.hourAngleMinutes, starHourAngle.hourAngleSeconds, star.DeclinationDegrees, star.DeclinationMinutes, star.DeclinationSeconds, Convert.ToDouble(PlanOptionsState.Latitude));
+
+                    StarInfo.StarDetails.Add(new StarDetail()
+                    {
+                        Name = star.Name,
+                        AltitudeDegree = starLocalPosition.altitudeDegrees,
+                        AltitudeMinute = starLocalPosition.altitudeMinutes,
+                        AltitudeSecond = starLocalPosition.altitudeSeconds,
+                        AzimuthDegrees = starLocalPosition.azimuthDegrees,
+                        AzimuthMinute = starLocalPosition.azimuthMinutes,
+                        AzimuthSecond = starLocalPosition.azimuthSeconds,
+                        Magnitude = star.Magnitude
+                    });
+
+                    StarInfo.StarDetailsFiltered = visibleOnly ? StarInfo.StarDetails.Where(x => x.AltitudeDegree > 0).ToList() : StarInfo.StarDetails;
+                }
             }
         }
     }

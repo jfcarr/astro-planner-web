@@ -1,12 +1,68 @@
 [
     {
         "name": "Sirius",
-        "rightAscension": 101.28716,
-        "declination": -16.71612
+        "rightAscensionHours": 6,
+        "rightAscensionMinutes": 45,
+        "rightAscensionSeconds": 8.917,
+        "declinationDegrees": -16,
+        "declinationMinutes": 42,
+        "declinationSeconds": 58.02,
+        "constellation": "Canis Major",
+        "magnitude": -1.46
+    },
+    {
+        "name": "Canopus",
+        "rightAscensionHours": 6,
+        "rightAscensionMinutes": 23,
+        "rightAscensionSeconds": 57.109,
+        "declinationDegrees": -52,
+        "declinationMinutes": 41,
+        "declinationSeconds": 44.381,
+        "constellation": "Carina",
+        "magnitude": -0.74
+    },
+    {
+        "name": "Arcturus",
+        "rightAscensionHours": 14,
+        "rightAscensionMinutes": 15,
+        "rightAscensionSeconds": 39.7,
+        "declinationDegrees": 19,
+        "declinationMinutes": 10,
+        "declinationSeconds": 56,
+        "constellation": "Bootes",
+        "magnitude": -0.05
+    },
+    {
+        "name": "Vega",
+        "rightAscensionHours": 18,
+        "rightAscensionMinutes": 36,
+        "rightAscensionSeconds": 56.336,
+        "declinationDegrees": 38,
+        "declinationMinutes": 47,
+        "declinationSeconds": 1.280,
+        "constellation": "Lyra",
+        "magnitude": 0.026
+    },
+    {
+        "name": "Capella",
+        "rightAscensionHours": 5,
+        "rightAscensionMinutes": 16,
+        "rightAscensionSeconds": 41.358,
+        "declinationDegrees": 45,
+        "declinationMinutes": 59,
+        "declinationSeconds": 52.769,
+        "constellation": "Auriga",
+        "magnitude": 0.08
     },
     {
         "name": "Rigel",
-        "rightAscension": 78.63447,
-        "declination": -8.20164
+        "rightAscensionHours": 5,
+        "rightAscensionMinutes": 14,
+        "rightAscensionSeconds": 32.272,
+        "declinationDegrees": -8,
+        "declinationMinutes": 12,
+        "declinationSeconds": 5.898,
+        "constellation": "Orion",
+        "magnitude": 0.13
     }
 ]
