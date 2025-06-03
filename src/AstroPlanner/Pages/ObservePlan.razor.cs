@@ -13,7 +13,8 @@ public partial class ObservePlan
     private bool showPlanetInfo = true;
     private bool showBrightStarInfo = true;
     private bool showEclipseInfo = true;
-    private bool showVisibleStarsOnly = false;
+    private bool showVisiblePlanetsOnly = true;
+    private bool showVisibleStarsOnly = true;
 
     private string? zipCode;
     private DateTime? observationDate;
@@ -39,7 +40,7 @@ public partial class ObservePlan
             AstroData.UpdateEclipseInfo();
             AstroData.UpdateMoonInfo();
             AstroData.UpdateSunInfo();
-            AstroData.UpdatePlanetInfo();
+            AstroData.UpdatePlanetInfo(showVisiblePlanetsOnly);
             AstroData.UpdateStarInfo(showVisibleStarsOnly);
         }
     }
@@ -66,7 +67,7 @@ public partial class ObservePlan
             AstroData.UpdateEclipseInfo();
             AstroData.UpdateMoonInfo();
             AstroData.UpdateSunInfo();
-            AstroData.UpdatePlanetInfo();
+            AstroData.UpdatePlanetInfo(showVisiblePlanetsOnly);
             AstroData.UpdateStarInfo(showVisibleStarsOnly);
         }
     }
