@@ -118,6 +118,26 @@
                     <td>Phase:</td>
                     <td>@MoonInfo.PhaseDescription</td>
                 </tr>
+            @if (PlanOptionsState.ObservationTime is not null)
+                {
+                    <tr>
+                        <td>Altitude:</td>
+                        <td>
+                            @MoonInfo.AltitudeDegree degrees
+                            @if (MoonInfo.AltitudeDegree > 0)
+                            {
+                                <FluentIcon Value="@(new Icons.Regular.Size24.Eye())" Title="Visible (above the horizon)" />
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Azimuth:</td>
+                        <td>
+                            @MoonInfo.AzimuthDegrees degrees
+                            (@Direction.AzimuthToCardinalDirection(MoonInfo.AzimuthDegrees))
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
@@ -125,7 +145,7 @@
     <div class="@(showPlanetInfo ? "block-visible" : "block-hidden")">
         <FluentLabel Typo="Typography.H4">Planets</FluentLabel>
         <FluentSwitch @bind-Value=showVisiblePlanetsOnly @bind-Value:after="UpdateState" Label=" Visible Planets Only:" />
-    @if (PlanetInfo.PlanetDetailsFiltered.Count > 0)
+        @if (PlanetInfo.PlanetDetailsFiltered.Count > 0)
         {
             <table class="table">
                 <thead>

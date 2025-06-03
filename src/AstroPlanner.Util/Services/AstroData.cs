@@ -45,7 +45,10 @@ public static class AstroData
     public static void UpdateMoonInfo()
     {
         PAMoon pAMoon = new();
+        PACoordinates pACoordinates = new();
+
         DateTime checkDate = (PlanOptionsState.ObservationDate is not null) ? (DateTime)PlanOptionsState.ObservationDate : new DateTime();
+        DateTime? checkTime = PlanOptionsState.ObservationTime;
 
         (double mrLTHour, double mrLTMin, double mrLocalDateDay, int mrLocalDateMonth, int mrLocalDateYear, double mrAzimuthDeg, double msLTHour, double msLTMin, double msLocalDateDay, int msLocalDateMonth, int msLocalDateYear, double msAzimuthDeg) riseSet = pAMoon.MoonriseAndMoonset(
             checkDate.Day, checkDate.Month, checkDate.Year,
@@ -102,6 +105,22 @@ public static class AstroData
             > .52 => $"Gibbous ({Math.Floor(moonPhase.moonPhase * 100)}%)",
             _ => "Unknown",
         };
+
+        if (checkTime is not null)
+        {
+            (double moonRAHour, double moonRAMin, double moonRASec, double moonDecDeg, double moonDecMin, double moonDecSec) moonPosition = pAMoon.ApproximatePositionOfMoon(checkTime.Value.Hour, checkTime.Value.Minute, checkTime.Value.Second, false, (PlanOptionsState.TimeZoneOffset is not null) ? PlanOptionsState.TimeZoneOffset.Value.Hours : 0, checkDate.Day, checkDate.Month, checkDate.Year);
+
+            (double hourAngleHours, double hourAngleMinutes, double hourAngleSeconds) planetHourAngle = pACoordinates.RightAscensionToHourAngle(moonPosition.moonRAHour, moonPosition.moonRAMin, moonPosition.moonRASec, checkTime.Value.Hour, checkTime.Value.Minute, checkTime.Value.Second, false, (PlanOptionsState.TimeZoneOffset is not null) ? PlanOptionsState.TimeZoneOffset.Value.Hours : 0, checkDate.Day, checkDate.Month, checkDate.Year, Convert.ToDouble(PlanOptionsState.Longitude));
+
+            (double azimuthDegrees, double azimuthMinutes, double azimuthSeconds, double altitudeDegrees, double altitudeMinutes, double altitudeSeconds) planetLocalPosition = pACoordinates.EquatorialCoordinatesToHorizonCoordinates(planetHourAngle.hourAngleHours, planetHourAngle.hourAngleMinutes, planetHourAngle.hourAngleSeconds, moonPosition.moonDecDeg, moonPosition.moonDecMin, moonPosition.moonDecSec, Convert.ToDouble(PlanOptionsState.Latitude));
+
+            MoonInfo.AltitudeDegree = planetLocalPosition.altitudeDegrees;
+            MoonInfo.AltitudeMinute = planetLocalPosition.altitudeMinutes;
+            MoonInfo.AltitudeSecond = planetLocalPosition.altitudeSeconds;
+            MoonInfo.AzimuthDegrees = planetLocalPosition.azimuthDegrees;
+            MoonInfo.AzimuthMinute = planetLocalPosition.azimuthMinutes;
+            MoonInfo.AzimuthSecond = planetLocalPosition.azimuthSeconds;
+        }
     }
 
     public static void UpdateSunInfo()
@@ -143,6 +162,7 @@ public static class AstroData
         DateTime? checkTime = PlanOptionsState.ObservationTime;
 
         PlanetInfo.PlanetDetails = [];
+        PlanetInfo.PlanetDetailsFiltered = [];
 
         if (checkTime is not null)
         {
@@ -205,10 +225,11 @@ public static class AstroData
             DateTime checkDate = (PlanOptionsState.ObservationDate is not null) ? (DateTime)PlanOptionsState.ObservationDate : new DateTime();
             DateTime? checkTime = PlanOptionsState.ObservationTime;
 
+            StarInfo.StarDetails = [];
+            StarInfo.StarDetailsFiltered = [];
+
             if (checkTime is not null)
             {
-                StarInfo.StarDetails = [];
-
                 foreach (Star star in StarInfo.stars)
                 {
                     (double hourAngleHours, double hourAngleMinutes, double hourAngleSeconds) starHourAngle = pACoordinates.RightAscensionToHourAngle(star.RightAscensionHours, star.RightAscensionMinutes, star.RightAscensionSeconds, checkTime.Value.Hour, checkTime.Value.Minute, checkTime.Value.Second, false, (PlanOptionsState.TimeZoneOffset is not null) ? PlanOptionsState.TimeZoneOffset.Value.Hours : 0, checkDate.Day, checkDate.Month, checkDate.Year, Convert.ToDouble(PlanOptionsState.Longitude));
