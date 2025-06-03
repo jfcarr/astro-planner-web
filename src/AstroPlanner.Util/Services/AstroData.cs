@@ -134,7 +134,7 @@ public static class AstroData
         SunInfo.SunSet = (riseSet.status == "OK") ? new DateTime(checkDate.Year, checkDate.Month, checkDate.Day, (int)riseSet.localSunsetHour, (int)riseSet.localSunsetMinute, 0).ToString("h:mm tt", CultureInfo.InvariantCulture) : "";
     }
 
-    public static void UpdatePlanetInfo()
+    public static void UpdatePlanetInfo(bool visibleOnly)
     {
         PAPlanet pAPlanet = new();
         PACoordinates pACoordinates = new();
@@ -177,6 +177,8 @@ public static class AstroData
                 });
 
             }
+
+            PlanetInfo.PlanetDetailsFiltered = visibleOnly ? PlanetInfo.PlanetDetails.Where(x => x.AltitudeDegree > 0).ToList() : PlanetInfo.PlanetDetails;
         }
     }
 
@@ -224,9 +226,9 @@ public static class AstroData
                         AzimuthSecond = starLocalPosition.azimuthSeconds,
                         Magnitude = star.Magnitude
                     });
-
-                    StarInfo.StarDetailsFiltered = visibleOnly ? StarInfo.StarDetails.Where(x => x.AltitudeDegree > 0).ToList() : StarInfo.StarDetails;
                 }
+
+                StarInfo.StarDetailsFiltered = visibleOnly ? StarInfo.StarDetails.Where(x => x.AltitudeDegree > 0).ToList() : StarInfo.StarDetails;
             }
         }
     }

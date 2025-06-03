@@ -124,7 +124,8 @@
 
     <div class="@(showPlanetInfo ? "block-visible" : "block-hidden")">
         <FluentLabel Typo="Typography.H4">Planets</FluentLabel>
-    @if (PlanetInfo.PlanetDetails.Count > 0)
+        <FluentSwitch @bind-Value=showVisiblePlanetsOnly @bind-Value:after="UpdateState" Label=" Visible Planets Only:" />
+    @if (PlanetInfo.PlanetDetailsFiltered.Count > 0)
         {
             <table class="table">
                 <thead>
@@ -136,7 +137,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var planetDetail in PlanetInfo.PlanetDetails)
+                    @foreach (var planetDetail in PlanetInfo.PlanetDetailsFiltered)
                     {
                         <tr>
                             <td>@planetDetail.Name</td>
@@ -156,7 +157,14 @@
         }
         else
         {
-            <p><i>Planet info not available. Have you specified an observation time?</i></p>
+            if (showVisiblePlanetsOnly)
+            {
+                <p><i>No visible planets at this time.</i></p>
+            }
+            else
+            {
+                <p><i>Planet info not available. Have you specified an observation time?</i></p>
+            }
         }
     </div>
 
@@ -197,7 +205,7 @@
         {
             if (showVisibleStarsOnly)
             {
-                <p><i>No visible stars at this time.</i></p>
+                <p><i>No visible bright stars at this time.</i></p>
             }
             else
             {
