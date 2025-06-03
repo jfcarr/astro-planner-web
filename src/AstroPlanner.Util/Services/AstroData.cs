@@ -245,6 +245,7 @@ public static class AstroData
                         AzimuthDegrees = starLocalPosition.azimuthDegrees,
                         AzimuthMinute = starLocalPosition.azimuthMinutes,
                         AzimuthSecond = starLocalPosition.azimuthSeconds,
+                        Constellation = star.Constellation,
                         Magnitude = star.Magnitude
                     });
                 }

@@ -9,5 +9,6 @@ public struct StarDetail
     public double AzimuthDegrees;
     public double AzimuthMinute;
     public double AzimuthSecond;
+    public string? Constellation;
     public double Magnitude;
 }

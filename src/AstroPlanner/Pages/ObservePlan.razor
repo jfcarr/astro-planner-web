@@ -199,6 +199,7 @@
                         <th>Name</th>
                         <th>Altitude</th>
                         <th>Azimuth</th>
+                        <th>Constellation</th>
                         <th>Magnitude</th>
                     </tr>
                 </thead>
@@ -215,6 +216,7 @@
                             </td>
                             <td>@starDetail.AzimuthDegrees degree@(starDetail.AzimuthDegrees > 1 ? "s" : "")
                                 (@Direction.AzimuthToCardinalDirection(starDetail.AzimuthDegrees))</td>
+                            <td>@starDetail.Constellation</td>
                             <td>@starDetail.Magnitude</td>
                         </tr>
                     }
