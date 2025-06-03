@@ -64,6 +64,7 @@
         <FluentSwitch @bind-Value=showSunInfo Label=" The Sun:" />
         <FluentSwitch @bind-Value=showMoonInfo Label=" The Moon:" />
         <FluentSwitch @bind-Value=showPlanetInfo Label=" Planets:" />
+        <FluentSwitch @bind-Value=showBrightStarInfo Label=" Bright Stars:" />
         <FluentSwitch @bind-Value=showEclipseInfo Label=" Eclipses:" />
     </FluentCard>
 </div>
@@ -156,6 +157,52 @@
         else
         {
             <p><i>Planet info not available. Have you specified an observation time?</i></p>
+        }
+    </div>
+
+    <div class="@(showBrightStarInfo ? "block-visible" : "block-hidden")">
+        <FluentLabel Typo="Typography.H4">Bright Stars</FluentLabel>
+        <FluentSwitch @bind-Value=showVisibleStarsOnly @bind-Value:after="UpdateState" Label=" Visible Stars Only:" />
+        @if (StarInfo.StarDetailsFiltered.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Altitude</th>
+                        <th>Azimuth</th>
+                        <th>Magnitude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var starDetail in StarInfo.StarDetailsFiltered)
+                    {
+                        <tr>
+                            <td>@starDetail.Name</td>
+                            <td>@starDetail.AltitudeDegree degree(s)
+                                @if (starDetail.AltitudeDegree > 0)
+                                {
+                                    <FluentIcon Value="@(new Icons.Regular.Size24.Eye())" Title="Visible (above the horizon)" />
+                                }
+                            </td>
+                            <td>@starDetail.AzimuthDegrees degree@(starDetail.AzimuthDegrees > 1 ? "s" : "")
+                                (@Direction.AzimuthToCardinalDirection(starDetail.AzimuthDegrees))</td>
+                            <td>@starDetail.Magnitude</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            if (showVisibleStarsOnly)
+            {
+                <p><i>No visible stars at this time.</i></p>
+            }
+            else
+            {
+                <p><i>Star info not available. Have you specified an observation time?</i></p>
+            }
         }
     </div>
 

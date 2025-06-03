@@ -17,7 +17,7 @@ internal class Program
         builder.Services.AddFluentUIComponents();
         builder.Services.AddScoped<LocalStorage>();
 
-        await DataProvider.InitStarsDb(builder.HostEnvironment.BaseAddress);
+        await AstroData.LoadStarInfo(builder.HostEnvironment.BaseAddress);
 
         await builder.Build().RunAsync();
     }
