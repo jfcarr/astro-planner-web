@@ -1,18 +1,14 @@
 namespace AstroPlanner.Util.Models;
 
-public static class PlanOptionsState
+public struct PlanOptionsState
 {
-    /// <summary>
-    /// Page Title, visible in the browser tab and page header bar.
-    /// </summary>
-    public static string PageTitle { get; set; } = "Plan Options";
-    public static string? ZipCode { get; set; }
-    public static string? PlaceName { get; set; }
-    public static string? Latitude { get; set; }
-    public static string? Longitude { get; set; }
-    public static string? TimeZone { get; set; }
-    public static TimeSpan? TimeZoneOffset { get; set; }
-    public static bool? IsDaylightSaving { get; set; }
-    public static DateTime? ObservationDate { get; set; }
-    public static DateTime? ObservationTime { get; set; }
+    public static string? ZipCode;
+    public static string? PlaceName;
+    public static string? Latitude;
+    public static string? Longitude;
+    public static string? TimeZone;
+    public static TimeSpan? TimeZoneOffset;
+    public static bool? IsDaylightSaving;
+    public static DateTime? ObservationDate;
+    public static DateTime? ObservationTime;
 }

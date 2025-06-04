@@ -27,7 +27,16 @@ public partial class Home
             observationDate = dateValue;
         if (DateTime.TryParse(await LocalStorage.GetItemAsync("ObservationTime"), out DateTime timeValue))
             observationTime = timeValue;
-
+        if (Boolean.TryParse(await LocalStorage.GetItemAsync("ShowSunInfo"), out bool showSunInfoValue))
+            showSunInfo = showSunInfoValue;
+        if (Boolean.TryParse(await LocalStorage.GetItemAsync("ShowMoonInfo"), out bool showMoonInfoValue))
+            showMoonInfo = showMoonInfoValue;
+        if (Boolean.TryParse(await LocalStorage.GetItemAsync("ShowPlanetInfo"), out bool showPlanetInfoValue))
+            showPlanetInfo = showPlanetInfoValue;
+        if (Boolean.TryParse(await LocalStorage.GetItemAsync("ShowBrightStarInfo"), out bool showBrightStarInfoValue))
+            showBrightStarInfo = showBrightStarInfoValue;
+        if (Boolean.TryParse(await LocalStorage.GetItemAsync("ShowEclipseInfo"), out bool showEclipseInfoValue))
+            showEclipseInfo = showEclipseInfoValue;
 
         if (!String.IsNullOrEmpty(zipCode) && String.IsNullOrEmpty(PlanOptionsState.PlaceName))
         {
@@ -61,6 +70,11 @@ public partial class Home
         await LocalStorage.SetItemAsync("ZipCode", zipCode ?? "");
         await LocalStorage.SetItemAsync("ObservationDate", observationDate.ToString() ?? "");
         await LocalStorage.SetItemAsync("ObservationTime", observationTime.ToString() ?? "");
+        await LocalStorage.SetItemAsync("ShowSunInfo", showSunInfo.ToString());
+        await LocalStorage.SetItemAsync("ShowMoonInfo", showMoonInfo.ToString());
+        await LocalStorage.SetItemAsync("ShowPlanetInfo", showPlanetInfo.ToString());
+        await LocalStorage.SetItemAsync("ShowBrightStarInfo", showBrightStarInfo.ToString());
+        await LocalStorage.SetItemAsync("ShowEclipseInfo", showEclipseInfo.ToString());
 
         if (!String.IsNullOrEmpty(PlanOptionsState.PlaceName) && PlanOptionsState.ObservationDate is not null)
         {
