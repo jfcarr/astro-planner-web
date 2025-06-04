@@ -12,9 +12,11 @@ public partial class Home
     private bool showMoonInfo = true;
     private bool showPlanetInfo = true;
     private bool showBrightStarInfo = true;
+    private bool showDeepSkyObjectInfo = true;
     private bool showEclipseInfo = true;
     private bool showVisiblePlanetsOnly = true;
     private bool showVisibleStarsOnly = true;
+    private bool showVisibleDeepSkyObjectsOnly = true;
 
     private string? zipCode;
     private DateTime? observationDate;
@@ -35,6 +37,8 @@ public partial class Home
             showPlanetInfo = showPlanetInfoValue;
         if (Boolean.TryParse(await LocalStorage.GetItemAsync("ShowBrightStarInfo"), out bool showBrightStarInfoValue))
             showBrightStarInfo = showBrightStarInfoValue;
+        if (Boolean.TryParse(await LocalStorage.GetItemAsync("ShowDeepSkyObjectInfo"), out bool showDeepSkyObjectInfoValue))
+            showDeepSkyObjectInfo = showDeepSkyObjectInfoValue;
         if (Boolean.TryParse(await LocalStorage.GetItemAsync("ShowEclipseInfo"), out bool showEclipseInfoValue))
             showEclipseInfo = showEclipseInfoValue;
 
@@ -51,6 +55,7 @@ public partial class Home
             AstroData.UpdateSunInfo();
             AstroData.UpdatePlanetInfo(showVisiblePlanetsOnly);
             AstroData.UpdateStarInfo(showVisibleStarsOnly);
+            AstroData.UpdateDeepSkyObjectInfo(showVisibleDeepSkyObjectsOnly);
         }
     }
 
@@ -74,6 +79,7 @@ public partial class Home
         await LocalStorage.SetItemAsync("ShowMoonInfo", showMoonInfo.ToString());
         await LocalStorage.SetItemAsync("ShowPlanetInfo", showPlanetInfo.ToString());
         await LocalStorage.SetItemAsync("ShowBrightStarInfo", showBrightStarInfo.ToString());
+        await LocalStorage.SetItemAsync("ShowDeepSkyObjectInfo", showDeepSkyObjectInfo.ToString());
         await LocalStorage.SetItemAsync("ShowEclipseInfo", showEclipseInfo.ToString());
 
         if (!String.IsNullOrEmpty(PlanOptionsState.PlaceName) && PlanOptionsState.ObservationDate is not null)
@@ -83,6 +89,7 @@ public partial class Home
             AstroData.UpdateSunInfo();
             AstroData.UpdatePlanetInfo(showVisiblePlanetsOnly);
             AstroData.UpdateStarInfo(showVisibleStarsOnly);
+            AstroData.UpdateDeepSkyObjectInfo(showVisibleDeepSkyObjectsOnly);
         }
     }
 }

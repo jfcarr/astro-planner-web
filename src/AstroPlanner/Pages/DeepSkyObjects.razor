@@ -1,0 +1,46 @@
+@page "/dso"
+@using AstroPlanner.Services
+@using AstroPlanner.Util.Models
+@using AstroPlanner.Util.Services
+@inject HttpClient Http
+
+<PageTitle>Deep Sky Objects</PageTitle>
+
+<FluentHeader>Deep Sky Objects</FluentHeader>
+
+<br />
+
+@if (DeepSkyObjectInfo.DeepSkyObjects == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Right Ascension</th>
+                <th>Declination</th>
+                <th>Type</th>
+                <th>Constellation</th>
+                <th>Magnitude</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var deepSkyObject in DeepSkyObjectInfo.DeepSkyObjects.OrderBy(ds => ds.Description))
+            {
+                <tr>
+                    <td>@deepSkyObject.Description (@deepSkyObject.Name)</td>
+                    <td>@deepSkyObject.RightAscensionHours h @deepSkyObject.RightAscensionMinutes m
+                        @deepSkyObject.RightAscensionSeconds s</td>
+                    <td>@deepSkyObject.DeclinationDegrees d @deepSkyObject.DeclinationMinutes m
+                        @deepSkyObject.DeclinationSeconds s</td>
+                    <td>@deepSkyObject.Type</td>
+                    <td>@deepSkyObject.Constellation</td>
+                    <td>@deepSkyObject.Magnitude</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

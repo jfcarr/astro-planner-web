@@ -18,6 +18,7 @@ internal class Program
         builder.Services.AddScoped<LocalStorage>();
 
         await AstroData.LoadStarInfo(builder.HostEnvironment.BaseAddress);
+        await AstroData.LoadDeepSkyObjectInfo(builder.HostEnvironment.BaseAddress);
 
         await builder.Build().RunAsync();
     }

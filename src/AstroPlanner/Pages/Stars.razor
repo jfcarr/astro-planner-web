@@ -10,35 +10,33 @@
 
 <br />
 
-<FluentCard>
-    @if (StarInfo.stars == null)
-    {
-        <p><em>Loading...</em></p>
-    }
-    else
-    {
-        <table class="table">
-            <thead>
+@if (StarInfo.stars == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Right Ascension</th>
+                <th>Declination</th>
+                <th>Constellation</th>
+                <th>Magnitude</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var star in StarInfo.stars.OrderBy(s => s.Magnitude))
+            {
                 <tr>
-                    <th>Name</th>
-                    <th>Right Ascension</th>
-                    <th>Declination</th>
-                    <th>Constellation</th>
-                    <th>Magnitude</th>
+                    <td>@star.Name</td>
+                    <td>@star.RightAscensionHours h @star.RightAscensionMinutes m @star.RightAscensionSeconds s</td>
+                    <td>@star.DeclinationDegrees d @star.DeclinationMinutes m @star.DeclinationSeconds s</td>
+                    <td>@star.Constellation</td>
+                    <td>@star.Magnitude</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var star in StarInfo.stars)
-                {
-                    <tr>
-                        <td>@star.Name</td>
-                        <td>@star.RightAscensionHours h @star.RightAscensionMinutes m @star.RightAscensionSeconds s</td>
-                        <td>@star.DeclinationDegrees d @star.DeclinationMinutes m @star.DeclinationSeconds s</td>
-                        <td>@star.Constellation</td>
-                        <td>@star.Magnitude</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-</FluentCard>
+            }
+        </tbody>
+    </table>
+}
