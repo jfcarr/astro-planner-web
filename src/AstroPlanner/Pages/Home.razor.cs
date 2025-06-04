@@ -4,7 +4,7 @@ using AstroPlanner.Util.Services;
 
 namespace AstroPlanner.Pages;
 
-public partial class ObservePlan
+public partial class Home
 {
     private bool showObserverOptions;
     private bool showSections = false;

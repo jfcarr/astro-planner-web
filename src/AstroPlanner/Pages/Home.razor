@@ -1,7 +1,261 @@
 ﻿@page "/"
+@using AstroPlanner.Util.Helpers
+@using AstroPlanner.Util.Models
+@using AstroPlanner.Util.Services
+@using Microsoft.FluentUI.AspNetCore.Components.Extensions
+@inject HttpClient Http
+@inject AstroPlanner.Services.LocalStorage LocalStorage
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Observing Plan</PageTitle>
 
-<h1>Welcome To AstroPlanner</h1>
+<FluentHeader>Observing Plan</FluentHeader>
 
-To get started, select "Observing Plan" from the menu, or click <a href="observeplan">here</a>.
+<div style="padding:10px;min-width:800px">
+    <FluentToolbar id="toolbar-fluent-components-two">
+        <FluentSwitch @bind-Value=showObserverOptions Label=" Observer Options" />
+        <FluentSwitch @bind-Value=showSections Label=" Sections" />
+    </FluentToolbar>
+</div>
+
+<div class="@(showObserverOptions ? "block-visible" : "block-hidden")">
+    <FluentCard Id="observerOptions" AreaRestricted="false">
+        <p>
+            <FluentTextField @bind-Value=zipCode @bind-Value:after="UpdateState" Label="Zip Code:"></FluentTextField>
+        </p>
+
+        <p>
+            <FluentButton Appearance="Appearance.Accent" @onclick="() => LocationProvider.GetCoordinates(zipCode)">
+                Lookup</FluentButton>
+        </p>
+
+        <FluentDatePicker Label="Observation Date:" @bind-Value=observationDate @bind-Value:after="UpdateState"
+            AriaLabel="To" DoubleClickToDate="@DateTime.Today" />
+
+        <FluentTimePicker @bind-Value="@observationTime" @bind-Value:after="UpdateState"
+            Label="Observation Time (optional):" />
+
+        <hr>
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>Place:</td>
+                    <td>@PlanOptionsState.PlaceName</td>
+                </tr>
+                <tr>
+                    <td>Latitude / Longitude:</td>
+                    <td>@PlanOptionsState.Latitude / @PlanOptionsState.Longitude</td>
+                </tr>
+                <tr>
+                    <td>Time Zone / UTC offset:</td>
+                    <td>@PlanOptionsState.TimeZone / @PlanOptionsState.TimeZoneOffset</td>
+                </tr>
+                <tr>
+                    <td>Daylight Saving:</td>
+                    <td>@PlanOptionsState.IsDaylightSaving</td>
+                </tr>
+            </tbody>
+        </table>
+    </FluentCard>
+</div>
+
+<div class="@(showSections ? "block-visible" : "block-hidden")">
+    <FluentCard AreaRestricted="false">
+        <FluentSwitch @bind-Value=showSunInfo Label=" The Sun:" />
+        <FluentSwitch @bind-Value=showMoonInfo Label=" The Moon:" />
+        <FluentSwitch @bind-Value=showPlanetInfo Label=" Planets:" />
+        <FluentSwitch @bind-Value=showBrightStarInfo Label=" Bright Stars:" />
+        <FluentSwitch @bind-Value=showEclipseInfo Label=" Eclipses:" />
+    </FluentCard>
+</div>
+
+@if (!String.IsNullOrEmpty(PlanOptionsState.ZipCode) && PlanOptionsState.ObservationDate != null)
+{
+    <br />
+    <h2>@PlanOptionsState.PlaceName - @PlanOptionsState.ObservationDate.ToDateOnly().ToLongDateString()
+        @(PlanOptionsState.ObservationTime is not null ?
+            $"at {PlanOptionsState.ObservationTime.ToTimeOnly().ToShortTimeString()}" : "")</h2>
+
+<div class="@(showSunInfo ? "block-visible" : "block-hidden")">
+    <FluentLabel Typo="Typography.H4">The Sun</FluentLabel>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Twilight (Astronomical / Nautical / Civil) begins:</td>
+                <td>@SunInfo.AstronomicalTwilightBegins / @SunInfo.NauticalTwilightBegins /
+                    @SunInfo.CivilTwilightBegins</td>
+            </tr>
+            <tr>
+                <td>Sunrise:</td>
+                <td>@SunInfo.SunRise</td>
+            </tr>
+            <tr>
+                <td>Sunset:</td>
+                <td>@SunInfo.SunSet</td>
+            </tr>
+            <tr>
+                <td>Twilight (Civil / Nautical / Astronomical) ends:</td>
+                <td>@SunInfo.CivilTwilightEnds / @SunInfo.NauticalTwilightEnds /
+                    @SunInfo.AstronomicalTwilightEnds</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+    <div class="@(showMoonInfo ? "block-visible" : "block-hidden")">
+        <FluentLabel Typo="Typography.H4">The Moon</FluentLabel>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>Rise:</td>
+                    <td>@MoonInfo.RiseTime</td>
+                </tr>
+                <tr>
+                    <td>Set:</td>
+                    <td>@MoonInfo.SetTime</td>
+                </tr>
+                <tr>
+                    <td>Phase:</td>
+                    <td>@MoonInfo.PhaseDescription</td>
+                </tr>
+            @if (PlanOptionsState.ObservationTime is not null)
+                {
+                    <tr>
+                        <td>Altitude:</td>
+                        <td>
+                            @MoonInfo.AltitudeDegree degrees
+                            @if (MoonInfo.AltitudeDegree > 0)
+                            {
+                                <FluentIcon Value="@(new Icons.Regular.Size24.Eye())" Title="Visible (above the horizon)" />
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Azimuth:</td>
+                        <td>
+                            @MoonInfo.AzimuthDegrees degrees
+                            (@Direction.AzimuthToCardinalDirection(MoonInfo.AzimuthDegrees))
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="@(showPlanetInfo ? "block-visible" : "block-hidden")">
+        <FluentLabel Typo="Typography.H4">Planets</FluentLabel>
+        <FluentSwitch @bind-Value=showVisiblePlanetsOnly @bind-Value:after="UpdateState" Label=" Visible Planets Only:" />
+        @if (PlanetInfo.PlanetDetailsFiltered.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Altitude</th>
+                        <th>Azimuth</th>
+                        <th>Magnitude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var planetDetail in PlanetInfo.PlanetDetailsFiltered)
+                    {
+                        <tr>
+                            <td>@planetDetail.Name</td>
+                            <td>@planetDetail.AltitudeDegree degree(s)
+                                @if (planetDetail.AltitudeDegree > 0)
+                                {
+                                    <FluentIcon Value="@(new Icons.Regular.Size24.Eye())" Title="Visible (above the horizon)" />
+                                }
+                            </td>
+                            <td>@planetDetail.AzimuthDegrees degree@(planetDetail.AzimuthDegrees > 1 ? "s" : "")
+                                (@Direction.AzimuthToCardinalDirection(planetDetail.AzimuthDegrees))</td>
+                            <td>@planetDetail.Magnitude</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            if (observationTime is null)
+            {
+                <p><i>If you want to view planet information, you must specify an observation time in observer options.</i></p>
+            }
+            else
+            {
+                if (showVisibleStarsOnly)
+                {
+                    <p><i>No visible planets at this time.</i></p>
+                }
+                else
+                {
+                    <p><i>Planet info not available.</i></p>
+                }
+            }
+        }
+    </div>
+
+    <div class="@(showBrightStarInfo ? "block-visible" : "block-hidden")">
+        <FluentLabel Typo="Typography.H4">Bright Stars</FluentLabel>
+        <FluentSwitch @bind-Value=showVisibleStarsOnly @bind-Value:after="UpdateState" Label=" Visible Stars Only:" />
+        @if (StarInfo.StarDetailsFiltered.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Altitude</th>
+                        <th>Azimuth</th>
+                        <th>Constellation</th>
+                        <th>Magnitude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var starDetail in StarInfo.StarDetailsFiltered)
+                    {
+                        <tr>
+                            <td>@starDetail.Name</td>
+                            <td>@starDetail.AltitudeDegree degree(s)
+                                @if (starDetail.AltitudeDegree > 0)
+                                {
+                                    <FluentIcon Value="@(new Icons.Regular.Size24.Eye())" Title="Visible (above the horizon)" />
+                                }
+                            </td>
+                            <td>@starDetail.AzimuthDegrees degree@(starDetail.AzimuthDegrees > 1 ? "s" : "")
+                                (@Direction.AzimuthToCardinalDirection(starDetail.AzimuthDegrees))</td>
+                            <td>@starDetail.Constellation</td>
+                            <td>@starDetail.Magnitude</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            if (observationTime is null)
+            {
+                <p><i>If you want to view star information, you must specify an observation time in observer options.</i></p>
+            }
+            else
+            {
+                if (showVisibleStarsOnly)
+                {
+                    <p><i>No visible bright stars at this time.</i></p>
+                }
+                else
+                {
+                    <p><i>Star info not available.</i></p>
+                }
+            }
+        }
+    </div>
+
+    <div class="@(showEclipseInfo ? "block-visible" : "block-hidden")">
+        <FluentLabel Typo="Typography.H4">Eclipses</FluentLabel>
+        @EclipseInfo.LunarEclipseStatus (@EclipseInfo.LunarEclipseDate => @EclipseInfo.LunarEclipseWhen)
+    </div>
+}
+else
+{
+    <p><i>Missing observer options</i></p>
+}
