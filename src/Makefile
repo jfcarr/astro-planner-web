@@ -3,7 +3,7 @@ ssh_username=$(DH_USER)
 ssh_password=$(DH_PASSWORD)
 ssh_port=$(DH_PORT)
 ssh_host=$(DH_HOST)
-remote_path=$(DH_ROOT)/www/blazor1.devtoprd.com
+remote_path=$(DH_ROOT)/www/astroplan.webwhimsy.com  # release
 
 default:
 	@echo 'Targets:'
