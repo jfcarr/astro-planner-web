@@ -254,4 +254,61 @@ public static class AstroData
             }
         }
     }
+
+    public static async Task LoadDeepSkyObjectInfo(string baseAddress)
+    {
+        try
+        {
+            HttpClient http = new();
+
+            DeepSkyObjectInfo.DeepSkyObjects = await http.GetFromJsonAsync<DeepSkyObject[]>($"{baseAddress}astro-data/dso.json");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    public static void UpdateDeepSkyObjectInfo(bool visibleOnly)
+    {
+        if (DeepSkyObjectInfo.DeepSkyObjects != null)
+        {
+            PACoordinates pACoordinates = new();
+
+            DateTime checkDate = (PlanOptionsState.ObservationDate is not null) ? (DateTime)PlanOptionsState.ObservationDate : new DateTime();
+            DateTime? checkTime = PlanOptionsState.ObservationTime;
+
+            DeepSkyObjectInfo.DeepSkyObjectDetails = [];
+            DeepSkyObjectInfo.DeepSkyObjectDetailsFiltered = [];
+
+            if (checkTime is not null)
+            {
+                foreach (DeepSkyObject deepSkyObject in DeepSkyObjectInfo.DeepSkyObjects)
+                {
+                    (double hourAngleHours, double hourAngleMinutes, double hourAngleSeconds) starHourAngle = pACoordinates.RightAscensionToHourAngle(deepSkyObject.RightAscensionHours, deepSkyObject.RightAscensionMinutes, deepSkyObject.RightAscensionSeconds, checkTime.Value.Hour, checkTime.Value.Minute, checkTime.Value.Second, false, (PlanOptionsState.TimeZoneOffset is not null) ? PlanOptionsState.TimeZoneOffset.Value.Hours : 0, checkDate.Day, checkDate.Month, checkDate.Year, Convert.ToDouble(PlanOptionsState.Longitude));
+
+                    (double azimuthDegrees, double azimuthMinutes, double azimuthSeconds, double altitudeDegrees, double altitudeMinutes, double altitudeSeconds) starLocalPosition = pACoordinates.EquatorialCoordinatesToHorizonCoordinates(starHourAngle.hourAngleHours, starHourAngle.hourAngleMinutes, starHourAngle.hourAngleSeconds, deepSkyObject.DeclinationDegrees, deepSkyObject.DeclinationMinutes, deepSkyObject.DeclinationSeconds, Convert.ToDouble(PlanOptionsState.Latitude));
+
+                    DeepSkyObjectInfo.DeepSkyObjectDetails.Add(new DeepSkyObjectDetail()
+                    {
+                        Name = deepSkyObject.Name,
+                        Description = deepSkyObject.Description,
+                        AltitudeDegree = starLocalPosition.altitudeDegrees,
+                        AltitudeMinute = starLocalPosition.altitudeMinutes,
+                        AltitudeSecond = starLocalPosition.altitudeSeconds,
+                        AzimuthDegrees = starLocalPosition.azimuthDegrees,
+                        AzimuthMinute = starLocalPosition.azimuthMinutes,
+                        AzimuthSecond = starLocalPosition.azimuthSeconds,
+                        Type = deepSkyObject.Type,
+                        Constellation = deepSkyObject.Constellation,
+                        Magnitude = deepSkyObject.Magnitude
+                    });
+                }
+
+                DeepSkyObjectInfo.DeepSkyObjectDetailsFiltered = visibleOnly
+                    ? DeepSkyObjectInfo.DeepSkyObjectDetails.Where(x => x.AltitudeDegree > 0).ToList()
+                    : DeepSkyObjectInfo.DeepSkyObjectDetails;
+            }
+        }
+    }
 }

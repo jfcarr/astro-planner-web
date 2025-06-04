@@ -71,6 +71,7 @@
             <FluentCheckbox @bind-Value=showMoonInfo @bind-Value:after=UpdateState Label="The Moon" />
             <FluentCheckbox @bind-Value=showPlanetInfo @bind-Value:after=UpdateState Label="Planets" />
             <FluentCheckbox @bind-Value=showBrightStarInfo @bind-Value:after=UpdateState Label="Bright Stars" />
+            <FluentCheckbox @bind-Value=showDeepSkyObjectInfo @bind-Value:after=UpdateState Label="Deep Sky Objects" />
             <FluentCheckbox @bind-Value=showEclipseInfo @bind-Value:after=UpdateState Label="Eclipses" />
         </FluentStack>
     </FluentCard>
@@ -262,6 +263,70 @@
                 else
                 {
                     <p><i>Star info not available.</i></p>
+                }
+            }
+        }
+    </div>
+
+    <div class="@(showDeepSkyObjectInfo ? "block-visible" : "block-hidden")">
+        <FluentLabel Typo="Typography.H4">Deep Sky Objects</FluentLabel>
+        <FluentToolbar>
+            <FluentStack>
+                <FluentCheckbox @bind-Value=showVisibleDeepSkyObjectsOnly @bind-Value:after="UpdateState"
+                    Label="Visible Deep Sky Objects Only" />
+            </FluentStack>
+        </FluentToolbar>
+        @if (DeepSkyObjectInfo.DeepSkyObjectDetailsFiltered.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Altitude</th>
+                        <th>Azimuth</th>
+                        <th>Constellation</th>
+                        <th>Type</th>
+                        <th>Magnitude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var deepSkyObjectDetail in DeepSkyObjectInfo.DeepSkyObjectDetailsFiltered.OrderBy(ds =>
+                                ds.Description))
+                    {
+                        <tr>
+                            <td>@deepSkyObjectDetail.Description (@deepSkyObjectDetail.Name)</td>
+                            <td>@deepSkyObjectDetail.AltitudeDegree degree(s)
+                                @if (deepSkyObjectDetail.AltitudeDegree > 0)
+                                {
+                                    <FluentIcon Value="@(new Icons.Regular.Size24.Eye())" Title="Visible (above the horizon)" />
+                                }
+                            </td>
+                            <td>@deepSkyObjectDetail.AzimuthDegrees degree@(deepSkyObjectDetail.AzimuthDegrees > 1 ? "s" : "")
+                                (@Direction.AzimuthToCardinalDirection(deepSkyObjectDetail.AzimuthDegrees))</td>
+                            <td>@deepSkyObjectDetail.Constellation</td>
+                            <td>@deepSkyObjectDetail.Type</td>
+                            <td>@deepSkyObjectDetail.Magnitude</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            if (observationTime is null)
+            {
+                <p><i>If you want to view deep sky object information, you must specify an observation time in observer options.</i>
+                </p>
+            }
+            else
+            {
+                if (showVisibleDeepSkyObjectsOnly)
+                {
+                    <p><i>No visible deep sky objects at this time.</i></p>
+                }
+                else
+                {
+                    <p><i>Deep sky object info not available.</i></p>
                 }
             }
         }
