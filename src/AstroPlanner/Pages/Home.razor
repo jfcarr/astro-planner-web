@@ -19,20 +19,25 @@
 
 <div class="@(showObserverOptions ? "block-visible" : "block-hidden")">
     <FluentCard Id="observerOptions" AreaRestricted="false">
-        <p>
+        <FluentStack VerticalAlignment=VerticalAlignment.Center Wrap=true>
             <FluentTextField @bind-Value=zipCode @bind-Value:after="UpdateState" Label="Zip Code:"></FluentTextField>
-        </p>
-
-        <p>
             <FluentButton Appearance="Appearance.Accent" @onclick="() => LocationProvider.GetCoordinates(zipCode)">
                 Lookup</FluentButton>
-        </p>
+        </FluentStack>
 
-        <FluentDatePicker Label="Observation Date:" @bind-Value=observationDate @bind-Value:after="UpdateState"
-            AriaLabel="To" DoubleClickToDate="@DateTime.Today" />
+        <br />
 
-        <FluentTimePicker @bind-Value="@observationTime" @bind-Value:after="UpdateState"
-            Label="Observation Time (optional):" />
+        <FluentStack VerticalAlignment=VerticalAlignment.Center Wrap=true>
+            <FluentDatePicker Label="Observation Date:" @bind-Value=observationDate @bind-Value:after="UpdateState"
+                AriaLabel="To" DoubleClickToDate="@DateTime.Today" />
+        </FluentStack>
+
+        <br />
+
+        <FluentStack VerticalAlignment=VerticalAlignment.Center Wrap=true>
+            <FluentTimePicker @bind-Value="@observationTime" @bind-Value:after="UpdateState"
+                Label="Observation Time (optional):" />
+        </FluentStack>
 
         <hr>
 
@@ -60,12 +65,14 @@
 </div>
 
 <div class="@(showSections ? "block-visible" : "block-hidden")">
-    <FluentCard AreaRestricted="false">
-        <FluentSwitch @bind-Value=showSunInfo Label=" The Sun:" />
-        <FluentSwitch @bind-Value=showMoonInfo Label=" The Moon:" />
-        <FluentSwitch @bind-Value=showPlanetInfo Label=" Planets:" />
-        <FluentSwitch @bind-Value=showBrightStarInfo Label=" Bright Stars:" />
-        <FluentSwitch @bind-Value=showEclipseInfo Label=" Eclipses:" />
+    <FluentCard>
+        <FluentStack Wrap=true>
+            <FluentCheckbox @bind-Value=showSunInfo Label="The Sun" />
+            <FluentCheckbox @bind-Value=showMoonInfo Label="The Moon" />
+            <FluentCheckbox @bind-Value=showPlanetInfo Label="Planets" />
+            <FluentCheckbox @bind-Value=showBrightStarInfo Label="Bright Stars" />
+            <FluentCheckbox @bind-Value=showEclipseInfo Label="Eclipses" />
+        </FluentStack>
     </FluentCard>
 </div>
 
@@ -144,7 +151,12 @@
 
     <div class="@(showPlanetInfo ? "block-visible" : "block-hidden")">
         <FluentLabel Typo="Typography.H4">Planets</FluentLabel>
-        <FluentSwitch @bind-Value=showVisiblePlanetsOnly @bind-Value:after="UpdateState" Label=" Visible Planets Only:" />
+        <FluentToolbar>
+            <FluentStack>
+                <FluentCheckbox @bind-Value=showVisiblePlanetsOnly @bind-Value:after="UpdateState"
+                    Label="Visible Planets Only" />
+            </FluentStack>
+        </FluentToolbar>
         @if (PlanetInfo.PlanetDetailsFiltered.Count > 0)
         {
             <table class="table">
@@ -197,7 +209,12 @@
 
     <div class="@(showBrightStarInfo ? "block-visible" : "block-hidden")">
         <FluentLabel Typo="Typography.H4">Bright Stars</FluentLabel>
-        <FluentSwitch @bind-Value=showVisibleStarsOnly @bind-Value:after="UpdateState" Label=" Visible Stars Only:" />
+        <FluentToolbar>
+            <FluentStack>
+                <FluentCheckbox @bind-Value=showVisibleStarsOnly @bind-Value:after="UpdateState"
+                    Label="Visible Stars Only" />
+            </FluentStack>
+        </FluentToolbar>
         @if (StarInfo.StarDetailsFiltered.Count > 0)
         {
             <table class="table">
