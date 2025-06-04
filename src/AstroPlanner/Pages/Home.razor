@@ -67,11 +67,11 @@
 <div class="@(showSections ? "block-visible" : "block-hidden")">
     <FluentCard>
         <FluentStack Wrap=true>
-            <FluentCheckbox @bind-Value=showSunInfo Label="The Sun" />
-            <FluentCheckbox @bind-Value=showMoonInfo Label="The Moon" />
-            <FluentCheckbox @bind-Value=showPlanetInfo Label="Planets" />
-            <FluentCheckbox @bind-Value=showBrightStarInfo Label="Bright Stars" />
-            <FluentCheckbox @bind-Value=showEclipseInfo Label="Eclipses" />
+            <FluentCheckbox @bind-Value=showSunInfo @bind-Value:after=UpdateState Label="The Sun" />
+            <FluentCheckbox @bind-Value=showMoonInfo @bind-Value:after=UpdateState Label="The Moon" />
+            <FluentCheckbox @bind-Value=showPlanetInfo @bind-Value:after=UpdateState Label="Planets" />
+            <FluentCheckbox @bind-Value=showBrightStarInfo @bind-Value:after=UpdateState Label="Bright Stars" />
+            <FluentCheckbox @bind-Value=showEclipseInfo @bind-Value:after=UpdateState Label="Eclipses" />
         </FluentStack>
     </FluentCard>
 </div>
