@@ -177,13 +177,20 @@
         }
         else
         {
-            if (showVisiblePlanetsOnly)
+            if (observationTime is null)
             {
-                <p><i>No visible planets at this time.</i></p>
+                <p><i>If you want to view planet information, you must specify an observation time in observer options.</i></p>
             }
             else
             {
-                <p><i>Planet info not available. Have you specified an observation time?</i></p>
+                if (showVisibleStarsOnly)
+                {
+                    <p><i>No visible planets at this time.</i></p>
+                }
+                else
+                {
+                    <p><i>Planet info not available.</i></p>
+                }
             }
         }
     </div>
@@ -225,13 +232,20 @@
         }
         else
         {
-            if (showVisibleStarsOnly)
+            if (observationTime is null)
             {
-                <p><i>No visible bright stars at this time.</i></p>
+                <p><i>If you want to view star information, you must specify an observation time in observer options.</i></p>
             }
             else
             {
-                <p><i>Star info not available. Have you specified an observation time?</i></p>
+                if (showVisibleStarsOnly)
+                {
+                    <p><i>No visible bright stars at this time.</i></p>
+                }
+                else
+                {
+                    <p><i>Star info not available.</i></p>
+                }
             }
         }
     </div>
