@@ -8,10 +8,20 @@
 
 <PageTitle>Observing Plan</PageTitle>
 
-<FluentHeader>Observing Plan</FluentHeader>
+@if (!String.IsNullOrEmpty(PlanOptionsState.ZipCode) && PlanOptionsState.ObservationDate != null)
+{
+    <FluentLabel Typo="Typography.H2"> Observing Plan for @PlanOptionsState.PlaceName on
+        @PlanOptionsState.ObservationDate.ToDateOnly().ToLongDateString()
+        @(PlanOptionsState.ObservationTime is not null ?
+            $"at {PlanOptionsState.ObservationTime.ToTimeOnly().ToShortTimeString()}" : "") </FluentLabel>
+}
+else
+{
+    <FluentLabel Typo="Typography.H2"> Observing Plan </FluentLabel>
+}
 
 <div style="padding:10px;min-width:800px">
-    <FluentToolbar id="toolbar-fluent-components-two">
+    <FluentToolbar>
         <FluentSwitch @bind-Value=showObserverOptions Label=" Observer Options" />
         <FluentSwitch @bind-Value=showSections Label=" Sections" />
     </FluentToolbar>
@@ -80,35 +90,32 @@
 @if (!String.IsNullOrEmpty(PlanOptionsState.ZipCode) && PlanOptionsState.ObservationDate != null)
 {
     <br />
-    <h2>@PlanOptionsState.PlaceName - @PlanOptionsState.ObservationDate.ToDateOnly().ToLongDateString()
-        @(PlanOptionsState.ObservationTime is not null ?
-            $"at {PlanOptionsState.ObservationTime.ToTimeOnly().ToShortTimeString()}" : "")</h2>
 
-<div class="@(showSunInfo ? "block-visible" : "block-hidden")">
-    <FluentLabel Typo="Typography.H4">The Sun</FluentLabel>
-    <table class="table">
-        <tbody>
-            <tr>
-                <td>Twilight (Astronomical / Nautical / Civil) begins:</td>
-                <td>@SunInfo.AstronomicalTwilightBegins / @SunInfo.NauticalTwilightBegins /
-                    @SunInfo.CivilTwilightBegins</td>
-            </tr>
-            <tr>
-                <td>Sunrise:</td>
-                <td>@SunInfo.SunRise</td>
-            </tr>
-            <tr>
-                <td>Sunset:</td>
-                <td>@SunInfo.SunSet</td>
-            </tr>
-            <tr>
-                <td>Twilight (Civil / Nautical / Astronomical) ends:</td>
-                <td>@SunInfo.CivilTwilightEnds / @SunInfo.NauticalTwilightEnds /
-                    @SunInfo.AstronomicalTwilightEnds</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    <div class="@(showSunInfo ? "block-visible" : "block-hidden")">
+        <FluentLabel Typo="Typography.H4">The Sun</FluentLabel>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>Twilight (Astronomical / Nautical / Civil) begins:</td>
+                    <td>@SunInfo.AstronomicalTwilightBegins / @SunInfo.NauticalTwilightBegins /
+                        @SunInfo.CivilTwilightBegins</td>
+                </tr>
+                <tr>
+                    <td>Sunrise:</td>
+                    <td>@SunInfo.SunRise</td>
+                </tr>
+                <tr>
+                    <td>Sunset:</td>
+                    <td>@SunInfo.SunSet</td>
+                </tr>
+                <tr>
+                    <td>Twilight (Civil / Nautical / Astronomical) ends:</td>
+                    <td>@SunInfo.CivilTwilightEnds / @SunInfo.NauticalTwilightEnds /
+                        @SunInfo.AstronomicalTwilightEnds</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <div class="@(showMoonInfo ? "block-visible" : "block-hidden")">
         <FluentLabel Typo="Typography.H4">The Moon</FluentLabel>
@@ -126,7 +133,7 @@
                     <td>Phase:</td>
                     <td>@MoonInfo.PhaseDescription</td>
                 </tr>
-            @if (PlanOptionsState.ObservationTime is not null)
+                @if (PlanOptionsState.ObservationTime is not null)
                 {
                     <tr>
                         <td>Altitude:</td>
@@ -339,5 +346,6 @@
 }
 else
 {
+    <br />
     <p><i>Missing observer options</i></p>
 }
