@@ -51,7 +51,7 @@ else
 
         <hr>
 
-        <table class="table">
+        <table class="table table-hover">
             <tbody>
                 <tr>
                     <td>Place:</td>
@@ -93,7 +93,7 @@ else
 
     <div class="@(showSunInfo ? "block-visible" : "block-hidden")">
         <FluentLabel Typo="Typography.H4">The Sun</FluentLabel>
-        <table class="table">
+        <table class="table table-hover">
             <tbody>
                 <tr>
                     <td>Twilight (Astronomical / Nautical / Civil) begins:</td>
@@ -119,7 +119,7 @@ else
 
     <div class="@(showMoonInfo ? "block-visible" : "block-hidden")">
         <FluentLabel Typo="Typography.H4">The Moon</FluentLabel>
-        <table class="table">
+        <table class="table table-hover">
             <tbody>
                 <tr>
                     <td>Rise:</td>
@@ -167,7 +167,7 @@ else
         </FluentToolbar>
         @if (PlanetInfo.PlanetDetailsFiltered.Count > 0)
         {
-            <table class="table">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -225,7 +225,7 @@ else
         </FluentToolbar>
         @if (StarInfo.StarDetailsFiltered.Count > 0)
         {
-            <table class="table">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -285,7 +285,7 @@ else
         </FluentToolbar>
         @if (DeepSkyObjectInfo.DeepSkyObjectDetailsFiltered.Count > 0)
         {
-            <table class="table">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>Name</th>
