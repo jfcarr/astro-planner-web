@@ -12,15 +12,16 @@ public static class AstroData
         PAEclipses eclipseInfo = new();
         DateTime checkDate = (PlanOptionsState.ObservationDate is not null) ? PlanOptionsState.ObservationDate.Value.Date.AddDays(-2) : new DateTime();
 
-        (string status, double eventDateDay, int eventDateMonth, int eventDateYear) occurrence = eclipseInfo.LunarEclipseOccurrence(
+        // Lunar eclipse
+        (string status, double eventDateDay, int eventDateMonth, int eventDateYear) lunarOccurrence = eclipseInfo.LunarEclipseOccurrence(
             checkDate.Day, checkDate.Month, checkDate.Year,
             false,
             (PlanOptionsState.TimeZoneOffset is not null) ? Math.Abs(PlanOptionsState.TimeZoneOffset.Value.Hours) : 0
         );
 
-        EclipseInfo.LunarEclipseStatus = occurrence.status;
+        EclipseInfo.LunarEclipseStatus = lunarOccurrence.status;
         EclipseInfo.LunarEclipseDate = EclipseInfo.LunarEclipseStatus.Contains("certain", StringComparison.CurrentCultureIgnoreCase)
-                    ? DateTime.Parse($"{occurrence.eventDateMonth}/{occurrence.eventDateDay}/{occurrence.eventDateYear}").ToLongDateString()
+                    ? DateTime.Parse($"{lunarOccurrence.eventDateMonth}/{lunarOccurrence.eventDateDay}/{lunarOccurrence.eventDateYear}").ToLongDateString()
                     : "N/A";
 
         if (EclipseInfo.LunarEclipseDate == "N/A")
@@ -29,11 +30,39 @@ public static class AstroData
         }
         else
         {
-            // DateTime? lunarEclipseDateTime = DateTime.Parse($"{occurrence.eventDateMonth}/{occurrence.eventDateDay}/{occurrence.eventDateYear}");
-            DateTime lunarEclipseDate = new(occurrence.eventDateYear, occurrence.eventDateMonth, (int)occurrence.eventDateDay);
+            DateTime lunarEclipseDate = new(lunarOccurrence.eventDateYear, lunarOccurrence.eventDateMonth, (int)lunarOccurrence.eventDateDay);
             DateTime observationDate = (PlanOptionsState.ObservationDate is not null) ? (DateTime)PlanOptionsState.ObservationDate : new DateTime();
 
             EclipseInfo.LunarEclipseWhen = lunarEclipseDate.CompareTo(observationDate) switch
+            {
+                0 => "today",
+                < 0 => "past",
+                > 0 => "upcoming"
+            };
+        }
+
+        // Solar eclipse
+        (string status, double eventDateDay, int eventDateMonth, int eventDateYear) solarOccurrence = eclipseInfo.SolarEclipseOccurrence(
+            checkDate.Day, checkDate.Month, checkDate.Year,
+            false,
+            (PlanOptionsState.TimeZoneOffset is not null) ? Math.Abs(PlanOptionsState.TimeZoneOffset.Value.Hours) : 0
+        );
+
+        EclipseInfo.SolarEclipseStatus = solarOccurrence.status;
+        EclipseInfo.SolarEclipseDate = EclipseInfo.SolarEclipseStatus.Contains("certain", StringComparison.CurrentCultureIgnoreCase)
+                    ? DateTime.Parse($"{solarOccurrence.eventDateMonth}/{solarOccurrence.eventDateDay}/{solarOccurrence.eventDateYear}").ToLongDateString()
+                    : "N/A";
+
+        if (EclipseInfo.SolarEclipseDate == "N/A")
+        {
+            EclipseInfo.SolarEclipseWhen = "N/A";
+        }
+        else
+        {
+            DateTime solarEclipseDate = new(solarOccurrence.eventDateYear, solarOccurrence.eventDateMonth, (int)solarOccurrence.eventDateDay);
+            DateTime observationDate = (PlanOptionsState.ObservationDate is not null) ? (DateTime)PlanOptionsState.ObservationDate : new DateTime();
+
+            EclipseInfo.SolarEclipseWhen = solarEclipseDate.CompareTo(observationDate) switch
             {
                 0 => "today",
                 < 0 => "past",
