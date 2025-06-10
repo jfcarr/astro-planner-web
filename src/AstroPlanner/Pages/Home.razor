@@ -341,7 +341,26 @@ else
 
     <div class="@(showEclipseInfo ? "block-visible" : "block-hidden")">
         <FluentLabel Typo="Typography.H4">Eclipses</FluentLabel>
-        @EclipseInfo.LunarEclipseStatus (@EclipseInfo.LunarEclipseDate => @EclipseInfo.LunarEclipseWhen)
+
+        <table class="table table-hover">
+            <thead>
+                <th>Status</th>
+                <th>Date</th>
+                <th>When</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@EclipseInfo.LunarEclipseStatus</td>
+                    <td>@EclipseInfo.LunarEclipseDate</td>
+                    <td>@EclipseInfo.LunarEclipseWhen</td>
+                </tr>
+                <tr>
+                    <td>@EclipseInfo.SolarEclipseStatus</td>
+                    <td>@EclipseInfo.SolarEclipseDate</td>
+                    <td>@EclipseInfo.SolarEclipseWhen</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 }
 else
