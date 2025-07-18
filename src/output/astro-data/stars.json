@@ -1,0 +1,123 @@
+[
+    {
+        "name": "Sirius",
+        "rightAscensionHours": 6,
+        "rightAscensionMinutes": 45,
+        "rightAscensionSeconds": 8.917,
+        "declinationDegrees": -16,
+        "declinationMinutes": 42,
+        "declinationSeconds": 58.02,
+        "constellation": "Canis Major",
+        "magnitude": -1.46
+    },
+    {
+        "name": "Canopus",
+        "rightAscensionHours": 6,
+        "rightAscensionMinutes": 23,
+        "rightAscensionSeconds": 57.109,
+        "declinationDegrees": -52,
+        "declinationMinutes": 41,
+        "declinationSeconds": 44.381,
+        "constellation": "Carina",
+        "magnitude": -0.74
+    },
+    {
+        "name": "Arcturus",
+        "rightAscensionHours": 14,
+        "rightAscensionMinutes": 15,
+        "rightAscensionSeconds": 39.7,
+        "declinationDegrees": 19,
+        "declinationMinutes": 10,
+        "declinationSeconds": 56,
+        "constellation": "Bootes",
+        "magnitude": -0.05
+    },
+    {
+        "name": "Vega",
+        "rightAscensionHours": 18,
+        "rightAscensionMinutes": 36,
+        "rightAscensionSeconds": 56.336,
+        "declinationDegrees": 38,
+        "declinationMinutes": 47,
+        "declinationSeconds": 1.280,
+        "constellation": "Lyra",
+        "magnitude": 0.026
+    },
+    {
+        "name": "Capella",
+        "rightAscensionHours": 5,
+        "rightAscensionMinutes": 16,
+        "rightAscensionSeconds": 41.358,
+        "declinationDegrees": 45,
+        "declinationMinutes": 59,
+        "declinationSeconds": 52.769,
+        "constellation": "Auriga",
+        "magnitude": 0.08
+    },
+    {
+        "name": "Rigel",
+        "rightAscensionHours": 5,
+        "rightAscensionMinutes": 14,
+        "rightAscensionSeconds": 32.272,
+        "declinationDegrees": -8,
+        "declinationMinutes": 12,
+        "declinationSeconds": 5.898,
+        "constellation": "Orion",
+        "magnitude": 0.13
+    },
+    {
+        "name": "Procyon",
+        "rightAscensionHours": 7,
+        "rightAscensionMinutes": 39,
+        "rightAscensionSeconds": 18.119,
+        "declinationDegrees": 5,
+        "declinationMinutes": 13,
+        "declinationSeconds": 29.955,
+        "constellation": "Canis Minor",
+        "magnitude": 0.34
+    },
+    {
+        "name": "Betelgeuse",
+        "rightAscensionHours": 5,
+        "rightAscensionMinutes": 55,
+        "rightAscensionSeconds": 10.305,
+        "declinationDegrees": 7,
+        "declinationMinutes": 24,
+        "declinationSeconds": 25.430,
+        "constellation": "Orion",
+        "magnitude": 0.50
+    },
+    {
+        "name": "Altair",
+        "rightAscensionHours": 19,
+        "rightAscensionMinutes": 50,
+        "rightAscensionSeconds": 46.998,
+        "declinationDegrees": 8,
+        "declinationMinutes": 52,
+        "declinationSeconds": 5.956,
+        "constellation": "Aquila",
+        "magnitude": 0.76
+    },
+    {
+        "name": "Aldebaran",
+        "rightAscensionHours": 4,
+        "rightAscensionMinutes": 35,
+        "rightAscensionSeconds": 55.239,
+        "declinationDegrees": 16,
+        "declinationMinutes": 30,
+        "declinationSeconds": 21.343,
+        "constellation": "Taurus",
+        "magnitude": 0.86
+    },
+    {
+        "name": "Antares",
+        "rightAscensionHours": 16,
+        "rightAscensionMinutes": 29,
+        "rightAscensionSeconds": 24.459,
+        "declinationDegrees": -26,
+        "declinationMinutes": 25,
+        "declinationSeconds": 55.209,
+        "constellation": "Scorpius",
+        "magnitude": 0.6
+    }
+]
