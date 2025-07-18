@@ -1,9 +1,9 @@
 {
   "mainAssemblyName": "AstroPlanner",
   "resources": {
-    "hash": "sha256-YIt1bXi8leY8Oqhj7C8rIgBM+wu4tLKSAwykFSQUsQ0=",
+    "hash": "sha256-ypENAdUB2esZaD2mH67+C6j0/gO+P6BNL028HmIpAKs=",
     "jsModuleNative": {
-      "dotnet.native.8.0.18.yh2hits9ja.js": "sha256-vpGXU2Db4O7R0SP5IcaEgxO0G23otXobierupfqaVAk="
+      "dotnet.native.8.0.18.o3jn3l8di8.js": "sha256-vpGXU2Db4O7R0SP5IcaEgxO0G23otXobierupfqaVAk="
     },
     "jsModuleRuntime": {
       "dotnet.runtime.8.0.18.inkc8xf4go.js": "sha256-QVLJL2PFoMyGwMOZIRShe4/0TJQfK2WMqoIYdVaI+yM="
@@ -17,8 +17,8 @@
       "icudt_no_CJK.dat": "sha256-L7sV7NEYP37/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs="
     },
     "assembly": {
-      "AstroPlanner.Util.wasm": "sha256-uGX+BdGKMz0MjTXM5xvEMjzajqw0dfwkvjE97ciZrwo=",
-      "AstroPlanner.wasm": "sha256-m5WMcPDW1qQGU5xH2nnrb0P2557zNdnn7Ysl3RPUG7U=",
+      "AstroPlanner.Util.wasm": "sha256-CpiPrhlhYhQpYYE03Xx6iYwkAtcCLFL/0Q8+ZZpgk+Y=",
+      "AstroPlanner.wasm": "sha256-T1wsnuYtMYXy0T1Ey8unPXPhtuvgLh5ntJeXfxwolvc=",
       "GeoTimeZone.wasm": "sha256-if7L+tcyr02J2eXjptmIF/Mz6iORgCl1cGBoA8pDSJE=",
       "Microsoft.AspNetCore.Components.Forms.wasm": "sha256-Bs5QYwoP3z0AweNWSxeNMyr/kpmdFnjj3tKbZPLuCjg=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-4vmTQvhxzq5vhcPE8y+6KekNTTQJ3Qjs+vscW/7AIxQ=",
