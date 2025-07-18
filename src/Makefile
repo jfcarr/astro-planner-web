@@ -21,6 +21,7 @@ publish:
 	cd AstroPlanner; dotnet publish -c Release
 	rm -rf $(serve_path)
 	cp -r $(publish_path) $(serve_path)
+	cd $(serve_path); sed -i 's|<base href="/" />|<base href="https://github.com/jfcarr/astro-planner-web/" />|' index.html
 
 php-serve:
 	@cd $(serve_path); php -S 0.0.0.0:8088
