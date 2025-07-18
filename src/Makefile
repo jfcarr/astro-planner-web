@@ -1,4 +1,5 @@
 publish_path=AstroPlanner/bin/Release/net8.0/publish/wwwroot/
+serve_path=output
 ssh_username=$(DH_USER)
 ssh_password=$(DH_PASSWORD)
 ssh_port=$(DH_PORT)
@@ -18,11 +19,13 @@ watch:
 
 publish:
 	cd AstroPlanner; dotnet publish -c Release
+	rm -rf $(serve_path)
+	cp -r $(publish_path) $(serve_path)
 
 php-serve:
-	@cd $(publish_path); php -S 0.0.0.0:8088
+	@cd $(serve_path); php -S 0.0.0.0:8088
 
-deploy:
+deploy-disabled:
 	@sshpass -p '$(ssh_password)' rsync -avze 'ssh -p $(ssh_port)' $(publish_path) $(ssh_username)@$(ssh_host):$(remote_path)
 
 clean:
